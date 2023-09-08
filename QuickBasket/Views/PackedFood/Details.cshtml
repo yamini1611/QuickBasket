@@ -1,0 +1,75 @@
+﻿@model QuickBasket.Models.packedfood
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>packedfood</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.originalcost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.originalcost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.retailprice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.retailprice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stock)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stock)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.image)
+        </dt>
+
+        <dd>
+            <img src="data:image;base64,@Convert.ToBase64String(Model.image)" id="img" class="card-img-top" alt="Vegetable Image">
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.offer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.offer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.category)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.pacid }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

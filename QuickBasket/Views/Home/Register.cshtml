@@ -1,0 +1,50 @@
+﻿@model QuickBasket.Models.User
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="card custom-card mt-5 ms-5">
+        <div class="card-header bg-dark text-white">
+            <h2 class="text-center">Registration Form</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="form-group mt-3 mb-3 ">
+                @Html.LabelFor(m => m.Username)
+                @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Username)
+            </div>
+            <div class="form-group mb-3">
+                @Html.LabelFor(m => m.password)
+                @Html.PasswordFor(m => m.password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.password)
+            </div>
+            <div class="form-group mb-3">
+                @Html.LabelFor(m => m.email)
+                @Html.TextBoxFor(m => m.email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.email)
+            </div>
+            <div class="form-group mb-3">
+                @Html.LabelFor(m => m.phone)
+                @Html.TextBoxFor(m => m.phone, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.phone)
+            </div>
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-danger">Register</button>
+                @Html.ActionLink("Already a User", "Login")
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .card {
+        width: 450px
+    }
+</style>
+

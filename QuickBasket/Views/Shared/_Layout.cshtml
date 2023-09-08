@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        #nav {
+            background-color: #090633fd;
+            color: white;
+        }
+
+        #a {
+            color: white;
+            font-size: 21px;
+        }
+
+        div {
+            font-family: worksans;
+        }
+
+       
+    </style>
+</head>
+<body>
+    <nav id="nav"  class="navbar navbar-expand-sm navbar-toggleable-sm ">
+        <div class="container">
+            <a href="~/Home/Index"> <img src="~/Content/Images/logo.png" height="100" width="160" alt="logimg" /></a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            @if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Users"))
+                {
+                    <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+
+                        <ul class="navbar-nav flex-grow-1 mt-2">
+                            <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
+                            <li>@Html.ActionLink("Cart", "Contact", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
+                            <li>@Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
+                           &hearts;<li id="a">@HttpContext.Current.User.Identity.Name</li>
+                        </ul>
+
+                    </div>
+                }
+
+                if (User.IsInRole("Admin"))
+                {
+        <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+
+            <ul class="navbar-nav ml-auto">
+                <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
+                <li>@Html.ActionLink("UserDetails", "UsersIndex", "User", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
+                <li class="ml-lg-auto">
+                    @Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })
+                </li>
+                <li class="ml-lg-2 mt-2">
+                    <h5>&hearts;@HttpContext.Current.User.Identity.Name</h5>
+                </li>
+            </ul>
+
+
+        </div>
+                }
+            }
+
+            else
+            {
+                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li>@Html.ActionLink("Register", "Register", "Home", null, new { @class = "nav-link text-center", @id = "a" })</li>
+                        <li>@Html.ActionLink("Login", "Login", "Home", null, new { @class = "nav-link text-center", @id = "a" })</li>
+                    </ul>
+                </div>
+            }
+        </div>
+</nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

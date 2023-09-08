@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9831cb557d114c9795cf6ba7bfb8de01" Name="Diagram1">
+        <EntityTypeShape EntityType="DOTNETModel.Role" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DOTNETModel.User" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="DOTNETModel.FK__Users__Roleid__6B24EA82" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DOTNETModel.Flower" Width="1.5" PointX="3" PointY="6.25" />
+        <EntityTypeShape EntityType="DOTNETModel.Fruit" Width="1.5" PointX="3" PointY="20.25" />
+        <EntityTypeShape EntityType="DOTNETModel.Meat" Width="1.5" PointX="3" PointY="23.75" />
+        <EntityTypeShape EntityType="DOTNETModel.Order" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="DOTNETModel.packedfood" Width="1.5" PointX="3" PointY="13.25" />
+        <EntityTypeShape EntityType="DOTNETModel.todayoffer" Width="1.5" PointX="3" PointY="16.75" />
+        <EntityTypeShape EntityType="DOTNETModel.Vegetable" Width="1.5" PointX="3" PointY="9.75" />
+        <AssociationConnector Association="DOTNETModel.FK__Orders__fruitid__75A278F5" />
+        <AssociationConnector Association="DOTNETModel.FK__Orders__fid__74AE54BC" />
+        <AssociationConnector Association="DOTNETModel.FK__Orders__mid__76969D2E" />
+        <AssociationConnector Association="DOTNETModel.FK__Orders__pacid__778AC167" />
+        <AssociationConnector Association="DOTNETModel.FK__Orders__producti__787EE5A0" />
+        <AssociationConnector Association="DOTNETModel.FK__Orders__userid__72C60C4A" />
+        <AssociationConnector Association="DOTNETModel.FK__Orders__vegid__73BA3083" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
