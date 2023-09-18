@@ -15,10 +15,10 @@ namespace QuickBasket.Models
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class DOTNETEntities1 : DbContext
+    public partial class DOTNETEntities8 : DbContext
     {
-        public DOTNETEntities1()
-            : base("name=DOTNETEntities1")
+        public DOTNETEntities8()
+            : base("name=DOTNETEntities8")
         {
         }
     
@@ -27,14 +27,15 @@ namespace QuickBasket.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<Flower> Flowers { get; set; }
         public virtual DbSet<Fruit> Fruits { get; set; }
         public virtual DbSet<Meat> Meats { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<packedfood> packedfoods { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<todayoffer> todayoffers { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Vegetable> Vegetables { get; set; }
     
         public virtual ObjectResult<Validate_User_Result> Validate_User(string username, string password)

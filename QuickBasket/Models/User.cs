@@ -17,19 +17,25 @@ namespace QuickBasket.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
+            this.Carts = new HashSet<Cart>();
             this.Orders = new HashSet<Order>();
+            this.todayoffers = new HashSet<todayoffer>();
         }
     
         public int userid { get; set; }
         public string Username { get; set; }
         public string password { get; set; }
-        public string email { get; set; }
-        public int Roleid { get; set; }
-        public string phone { get; set; }
         public Nullable<System.DateTime> modified_date { get; set; }
+        public string email { get; set; }
+        public Nullable<int> Roleid { get; set; } = 2;
+        public string phone { get; set; }
     
-        public virtual Role Role { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cart> Carts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual Role Role { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<todayoffer> todayoffers { get; set; }
     }
 }

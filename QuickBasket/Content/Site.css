@@ -51,6 +51,16 @@
     }
 }
 
+@keyframes moveTruck {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
 
 
 /* Set width on the form input elements since they're 100% wide by default */

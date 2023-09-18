@@ -1,0 +1,202 @@
+﻿@model IEnumerable<QuickBasket.Models.Cart>
+
+@{
+    ViewBag.Title = "CartView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Include jQuery and Razorpay script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/razorpay.js"></script>
+
+<style>
+    #img {
+        height: 200px;
+        width: 250px;
+    }
+
+    #empty {
+        font-size: 26px;
+        padding: 160px;
+    }
+
+    #totalAmount {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+
+    #quan {
+        font-size: 30px;
+    }
+
+    .gradient-custom {
+        background: blue;
+    }
+
+    .card-custom {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-bottom-left-radius: 10% 50%;
+        border-top-left-radius: 10% 50%;
+        background-color: #f8f9fa;
+    }
+
+    .input-custom {
+        background-color: white;
+    }
+
+    .white-text {
+        color: hsl(52, 0%, 98%);
+        font-weight: 100;
+        font-size: 14px;
+    }
+
+    .back-button {
+        background-color: hsl(52, 0%, 98%);
+        font-weight: 700;
+        color: black;
+        margin-top: 50px;
+    }
+
+    .invalid-feedback {
+        color: red;
+    }
+</style>
+
+@if (Session["UserID"] != null)
+{
+    if (Model.Any(item => item.User.userid == (int)Session["UserID"]))
+    {
+        int totalAmount = 0;
+        string productNames = "";
+
+        <table class="table table-bordered text-center">
+            <!-- Table header -->
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+
+            <!-- Table rows for items in the cart -->
+            @foreach (var item in Model)
+            {
+                if (item.User.userid == (int)Session["UserID"])
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.name)</td>
+                        <td>
+                            <img src="data:image;base64,@Convert.ToBase64String(item.image)" alt="Vegetable Image" id="img">
+                        </td>
+                        <td class="d-flex">
+                            <!-- Increment quantity form -->
+                            <form method="post" action="@Url.Action("UpdateCart", "Cart")">
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("cartId", item.cartid)
+                                @Html.Hidden("isIncrement", true)
+                                <button class="btn btn-dark" type="submit">+</button>
+                            </form>
+                            <span class="quantity-display ms-2 me-2">@Html.DisplayFor(modelItem => item.quantity)</span>
+                            <!-- Decrement quantity form -->
+                            <form method="post" action="@Url.Action("UpdateCart", "Cart")">
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("cartId", item.cartid)
+                                @Html.Hidden("isIncrement", false)
+                                <button class="btn btn-dark" type="submit">-</button>
+                            </form>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.price)</td>
+                        <td>
+                            @Html.ActionLink("Delete", "Delete", new { id = item.cartid }, new { @class = "btn btn-danger btn-sm" })
+                        </td>
+                    </tr>
+
+                    totalAmount += (int)item.price;
+                    productNames += item.name + ", ";
+                    productNames = productNames.TrimEnd(',', ' ');
+                }
+            }
+
+            <tr>
+                <td colspan="3"></td>
+                <td>
+                    Total amount: <span id="totalAmount">@totalAmount</span>
+                </td>
+                <td>
+                    <button id="proceedToPayment" class="btn btn-dark">Proceed to Payment</button>
+                </td>
+            </tr>
+        </table>
+
+        <div id="razorpayModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Payment</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h2>Enter Your Details</h2>
+
+                        <!-- Payment form -->
+                        <form id="paymentForm" method="post" action="@Url.Action("PlaceOrder", "Order")">
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("TotalAmount", totalAmount)
+                            @Html.Hidden("Products", productNames)
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contactNumber" class="form-label">Contact Number</label>
+                                <input type="text" class="form-control" id="contactNumber" name="contactNumber" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">Amount</label>
+                                <input type="text" class="form-control" id="amount" name="amount" value="@totalAmount" readonly>
+                            </div>
+                            <button type="submit" class="btn btn-dark" id="payButton">Pay Now</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="paymentResult"></div>
+
+        <script>
+            $(document).ready(function () {
+                $("#proceedToPayment").click(function () {
+                    
+                    $("#razorpayModal").modal("show");
+                });
+
+              
+            });
+        </script>
+
+    }
+    else
+    {
+        <div class="text-center" id="empty">
+            <h1>Your Cart is Empty!</h1>
+            <a href="@Url.Action("Index", "Home")" class="btn btn-warning">Add Item To Cart</a>
+        </div>
+    }
+}
+else
+{
+    <p>You need to be logged in to view your cart.</p>
+}

@@ -4,24 +4,26 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9831cb557d114c9795cf6ba7bfb8de01" Name="Diagram1">
-        <EntityTypeShape EntityType="DOTNETModel.Role" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DOTNETModel.User" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <AssociationConnector Association="DOTNETModel.FK__Users__Roleid__6B24EA82" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="DOTNETModel.Flower" Width="1.5" PointX="3" PointY="6.25" />
-        <EntityTypeShape EntityType="DOTNETModel.Fruit" Width="1.5" PointX="3" PointY="20.25" />
-        <EntityTypeShape EntityType="DOTNETModel.Meat" Width="1.5" PointX="3" PointY="23.75" />
-        <EntityTypeShape EntityType="DOTNETModel.Order" Width="1.5" PointX="5.25" PointY="0.75" />
-        <EntityTypeShape EntityType="DOTNETModel.packedfood" Width="1.5" PointX="3" PointY="13.25" />
-        <EntityTypeShape EntityType="DOTNETModel.todayoffer" Width="1.5" PointX="3" PointY="16.75" />
-        <EntityTypeShape EntityType="DOTNETModel.Vegetable" Width="1.5" PointX="3" PointY="9.75" />
-        <AssociationConnector Association="DOTNETModel.FK__Orders__fruitid__75A278F5" />
-        <AssociationConnector Association="DOTNETModel.FK__Orders__fid__74AE54BC" />
-        <AssociationConnector Association="DOTNETModel.FK__Orders__mid__76969D2E" />
-        <AssociationConnector Association="DOTNETModel.FK__Orders__pacid__778AC167" />
-        <AssociationConnector Association="DOTNETModel.FK__Orders__producti__787EE5A0" />
-        <AssociationConnector Association="DOTNETModel.FK__Orders__userid__72C60C4A" />
-        <AssociationConnector Association="DOTNETModel.FK__Orders__vegid__73BA3083" />
+      <Diagram DiagramId="411e6f6eaa4a4f27934e684cb8b224a1" Name="Diagram1">
+        <EntityTypeShape EntityType="DOTNETModel.Cart" Width="1.5" PointX="5.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="DOTNETModel.Flower" Width="1.5" PointX="1.5" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DOTNETModel.Fruit" Width="1.5" PointX="3" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DOTNETModel.Meat" Width="1.5" PointX="3" PointY="16.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DOTNETModel.Order" Width="1.5" PointX="9.125" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DOTNETModel.packedfood" Width="1.5" PointX="3" PointY="20.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DOTNETModel.Role" Width="1.5" PointX="0.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DOTNETModel.todayoffer" Width="1.5" PointX="5.25" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DOTNETModel.User" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DOTNETModel.Vegetable" Width="1.5" PointX="3" PointY="23.625" IsExpanded="true" />
+        <AssociationConnector Association="DOTNETModel.FK__Cart__fid__65370702" ManuallyRouted="false" />
+        <AssociationConnector Association="DOTNETModel.FK__Cart__Flowerid__671F4F74" ManuallyRouted="false" />
+        <AssociationConnector Association="DOTNETModel.FK__Cart__mid__69FBBC1F" ManuallyRouted="false" />
+        <AssociationConnector Association="DOTNETModel.FK__Cart__pacid__681373AD" ManuallyRouted="false" />
+        <AssociationConnector Association="DOTNETModel.FK__Cart__userid__625A9A57" ManuallyRouted="false" />
+        <AssociationConnector Association="DOTNETModel.FK__Cart__vegid__634EBE90" ManuallyRouted="false" />
+        <AssociationConnector Association="DOTNETModel.FK__Orders__userid__793DFFAF" ManuallyRouted="false" />
+        <AssociationConnector Association="DOTNETModel.FK__Users__Roleid__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="DOTNETModel.FK__todayoffe__useri__3587F3E0" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,0 +1,115 @@
+﻿@model IEnumerable<QuickBasket.Models.Fruit>
+
+
+<style>
+    #card-img {
+        height: 230px;
+        width: contain;
+    }
+
+    .card {
+        padding: 15px;
+        border: none;
+    }
+
+    #oc {
+        text-decoration: line-through;
+    }
+
+    .counter {
+        width: 150px;
+        display: flex;
+        align-items: center;
+    }
+
+        .counter input {
+            width: 50px;
+            border: 0;
+            line-height: 30px;
+            font-size: 20px;
+            text-align: center;
+            background: black;
+            color: #fff;
+            appearance: none;
+            outline: 0;
+        }
+
+        .counter span {
+            display: block;
+            font-size: 25px;
+            padding: 0 10px;
+            cursor: pointer;
+            color: #0052cc;
+            user-select: none;
+        }
+
+    #view {
+        visibility: hidden;
+    }
+
+    .card:hover #view {
+        visibility: visible;
+    }
+
+    .card {
+        height: 340px;
+    }
+</style>
+
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+<div class="col-md-3 mb-4">
+    <div class="card">
+        <a href="@Url.Action("Addtocart", new {id = item.fid }) ">
+            <img src="data:image;base64,@Convert.ToBase64String(item.image)" class="card-img-top" alt="Vegetable Image" id="card-img">
+        </a>
+            <div class="card-body">
+            <h5 class="card-title text-center">@Html.DisplayFor(modelItem => item.name)</h5>
+
+            <div class="text-center">
+                <button type="button" id="view" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#viewveg@(item.fid)">View</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+}
+
+    <!-- Modal -->
+    @foreach (var item in Model)
+    {
+<div class="modal fade" id="viewveg@(item.fid)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@Html.DisplayFor(modelItem => item.name) </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-5">
+                            <img src="data:image;base64,@Convert.ToBase64String(item.image)" class="card-img-top" alt="Vegetable Image" id="modal-card-img">
+                        </div>
+                        <div class="col-6">
+                            <div class="card-text p-5 text-start ms-2">
+                                <h1 style="font-size:35px">@Html.DisplayFor(modelItem => item.name) </h1>
+                                <h3> ₹@Html.DisplayFor(modelItem => item.retailprice) <span> / Kg</span> </h3>
+                                <h5 id="oc"> ₹@Html.DisplayFor(modelItem => item.originalcost) </h5>
+                                <br>
+                                <h2> @Html.DisplayFor(modelItem => item.offer) Off </h2>
+                             
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+</div>
+}
+
+</div>
+

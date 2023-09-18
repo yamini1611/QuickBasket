@@ -11,7 +11,7 @@ namespace QuickBasket.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        public DOTNETEntities1 entities = new DOTNETEntities1();
+        public DOTNETEntities8 entities = new DOTNETEntities8();
 
         // GET: User
         [Authorize(Roles = "Admin")]

@@ -4,6 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
+ 
+    <script src="https://kit.fontawesome.com/d7200c44d8.js" crossorigin="anonymous"></script>
+    <link rel="icon" href="@Url.Content("~/Content/Images/logo.png")" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <style>
@@ -12,7 +15,7 @@
             color: white;
         }
 
-        #a {
+        #a, #ab {
             color: white;
             font-size: 21px;
         }
@@ -20,8 +23,6 @@
         div {
             font-family: worksans;
         }
-
-       
     </style>
 </head>
 <body>
@@ -40,9 +41,13 @@
 
                         <ul class="navbar-nav flex-grow-1 mt-2">
                             <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
-                            <li>@Html.ActionLink("Cart", "Contact", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
-                            <li>@Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
-                           &hearts;<li id="a">@HttpContext.Current.User.Identity.Name</li>
+                            <li>@Html.ActionLink("Cart", "CartView", "Cart", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
+                            <li>@Html.ActionLink("Your Orders", "ViewOrder" ,"Order", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
+                          
+                        </ul>
+                        <ul class="navbar-nav navbar-right">
+                            <li class="nav-link" id="a"><i class="fa-solid fa-user fa-flip"></i> @HttpContext.Current.User.Identity.Name</li>
+                            <li>@Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "nav-link", @id = "ab" })</li>
                         </ul>
 
                     </div>

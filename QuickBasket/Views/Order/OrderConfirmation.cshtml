@@ -1,0 +1,22 @@
+﻿@model QuickBasket.Models.Order
+
+@{
+    ViewBag.Title = "Order Confirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Order Confirmation</h2>
+
+    <div class="alert alert-success">
+        <p>Thank you for placing your order with us. Your order details are as follows:</p>
+
+        <p><strong>Order ID:</strong> @Model.RazorpayOrderId</p>
+        <p><strong>Total Amount:</strong>  ₹ @Model.Total_amount</p>
+        <p><strong>Products:</strong> @Model.products</p>
+        <p><strong>Delivery Address:</strong> @Model.address</p>
+        <p><strong>Possible Delivery Date:</strong> @Model.Possibledelivery.ToString()</p>
+    </div>
+
+
+    <p><a href="@Url.Action("Index", "Home")">Back to Home</a></p>
+</div>

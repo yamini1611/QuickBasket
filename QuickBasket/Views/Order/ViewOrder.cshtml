@@ -1,0 +1,55 @@
+﻿@model IEnumerable<QuickBasket.Models.Order>
+
+@{
+    ViewBag.Title = "ViewOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var userOrders = Model.Where(order => order.User.userid == (int)Session["UserID"]).ToList();
+}
+
+@if (Session["UserID"] != null)
+{
+    if (userOrders.Any())
+    {
+        <div class="container mt-5">
+            <h2>View Orders</h2>
+            <div class="row">
+                @foreach (var item in userOrders)
+                {
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h4 class="card-title">Order ID: @Html.DisplayFor(modelItem => item.RazorpayOrderId)</h4>
+                                <p class="card-text">Placed Date: @Html.DisplayFor(modelItem => item.Placeddate)</p>
+                                <p class="card-text">Possible Delivery: @Html.DisplayFor(modelItem => item.Possibledelivery)</p>
+                                <p class="card-text">Total Amount: @Html.DisplayFor(modelItem => item.Total_amount)</p>
+                                <p class="card-text">Products: @Html.DisplayFor(modelItem => item.products)</p>
+                                <p class="card-text">Delivery Address: @Html.DisplayFor(modelItem => item.address)</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container mt-5">
+            <div class="alert alert-info">
+                <h4>You don't have any orders.</h4>
+                <p><a href="~/Home/Index" class="btn btn-dark">Order Now</a></p>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="container mt-5">
+        <div class="alert alert-info">
+            <h4>Login To View Orders</h4>
+            <p><a href="~/Home/Login" class="btn btn-dark">Login Now</a></p>
+        </div>
+    </div>
+}

@@ -52,7 +52,31 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.4\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Razorpay, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Razorpay.3.0.2\lib\net45\Razorpay.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -129,60 +153,65 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\FlowersController.cs" />
     <Compile Include="Controllers\FruitController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MeatController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PackedFoodController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VegetableController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cart.cs">
+      <DependentUpon>Quickbasket.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Flower.cs">
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Fruit.cs">
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Meat.cs">
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Order.cs">
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\packedfood.cs">
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\QuickBasket.Context.cs">
+    <Compile Include="Models\Quickbasket.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>QuickBasket.Context.tt</DependentUpon>
+      <DependentUpon>Quickbasket.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\QuickBasket.cs">
+    <Compile Include="Models\Quickbasket.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\QuickBasket.Designer.cs">
+    <Compile Include="Models\Quickbasket.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>QuickBasket.edmx</DependentUpon>
+      <DependentUpon>Quickbasket.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\todayoffer.cs">
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Validate_User_Result.cs">
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Vegetable.cs">
-      <DependentUpon>QuickBasket.tt</DependentUpon>
+      <DependentUpon>Quickbasket.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -208,15 +237,15 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\QuickBasket.Context.tt">
+    <Content Include="Models\Quickbasket.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>QuickBasket.Context.cs</LastGenOutput>
-      <DependentUpon>QuickBasket.edmx</DependentUpon>
+      <DependentUpon>Quickbasket.edmx</DependentUpon>
+      <LastGenOutput>Quickbasket.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\QuickBasket.tt">
+    <Content Include="Models\Quickbasket.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>QuickBasket.edmx</DependentUpon>
-      <LastGenOutput>QuickBasket.cs</LastGenOutput>
+      <DependentUpon>Quickbasket.edmx</DependentUpon>
+      <LastGenOutput>Quickbasket.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -224,14 +253,14 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\QuickBasket.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>QuickBasket.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\QuickBasket.edmx.diagram">
-      <DependentUpon>QuickBasket.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\Fonts\WorkSans-Regular.ttf" />
+    <EntityDeploy Include="Models\Quickbasket.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Quickbasket.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Quickbasket.edmx.diagram">
+      <DependentUpon>Quickbasket.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -282,6 +311,20 @@
     <Content Include="Views\PackedFood\Create.cshtml" />
     <Content Include="Views\PackedFood\Details.cshtml" />
     <Content Include="Views\PackedFood\Edit.cshtml" />
+    <Content Include="Views\Fruit\UserIndex.cshtml" />
+    <Content Include="Views\Vegetable\UserIndex.cshtml" />
+    <Content Include="Views\PackedFood\UserIndex.cshtml" />
+    <Content Include="Views\Meat\UserIndex.cshtml" />
+    <Content Include="Views\Flowers\UserIndex.cshtml" />
+    <Content Include="Views\Vegetable\Addtocart.cshtml" />
+    <Content Include="Views\Cart\CartView.cshtml" />
+    <Content Include="Views\Fruit\Addtocart.cshtml" />
+    <Content Include="Views\Meat\Addtocart.cshtml" />
+    <Content Include="Views\Flowers\Addtocart.cshtml" />
+    <Content Include="Views\PackedFood\Addtocart.cshtml" />
+    <Content Include="Views\Order\OrderConfirmation.cshtml" />
+    <Content Include="Views\Order\PlaceOrder.cshtml" />
+    <Content Include="Views\Order\ViewOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

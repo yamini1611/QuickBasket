@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'E:\Dot Net programming\Entity Framework\QuickBasket\QuickBasket\Models\QuickBasket.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\PRAVEEN NARAYANASAMY\source\repos\QuickBasket\QuickBasket\Models\Quickbasket.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

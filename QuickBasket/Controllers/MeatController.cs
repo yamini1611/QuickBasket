@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,12 +13,82 @@ namespace QuickBasket.Controllers
     public class MeatController : Controller
     {
         // GET: Meat
-        public DOTNETEntities1 entities = new DOTNETEntities1();
+        public DOTNETEntities8 entities = new DOTNETEntities8();
         public ActionResult Index()
         {
             List<Meat> MeatList = entities.Meats.ToList();
             return View(MeatList);
         }
+        public ActionResult UserIndex()
+        {
+            List<Meat> MeatList = entities.Meats.ToList();
+            return View(MeatList);
+        }
+
+        public ActionResult Addtocart(int? id)
+        {
+            Meat Veg = entities.Meats.Find(id);
+            TempData["mid"] = Veg.mid;
+            TempData["price"] = Veg.retailprice;
+            TempData["name"] = Veg.name;
+            TempData["image"] = Veg.image;
+            TempData["userid"] = Session["UserID"];
+            return View(Veg);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Addtocart(Meat veg, int quantity)
+        {
+            try
+            {
+                int? price = TempData["price"] as int?;
+                string name = TempData["name"] as string;
+                byte[] image = TempData["image"] as byte[];
+                int? userId = TempData["userid"] as int?;
+                int? mid = TempData["mid"] as int?;
+
+                System.Diagnostics.Debug.WriteLine($"userId: {userId}, mid: {mid}, quantity: {quantity}");
+
+                if (ModelState.IsValid)
+                {
+                    var existingCartItem = entities.Carts.SingleOrDefault(c => c.userid == userId && c.mid == mid);
+
+                    if (existingCartItem != null)
+                    {
+                        existingCartItem.quantity += quantity;
+                        existingCartItem.price = price * existingCartItem.quantity;
+                    }
+                    else
+                    {
+                        var newCartItem = new Cart
+                        {
+                            mid = mid.Value,
+                            userid = userId,
+                            quantity = quantity,
+                            image = image,
+                            name = name,
+                            price = price * quantity
+                        };
+
+                        entities.Carts.Add(newCartItem);
+                    }
+
+                    entities.SaveChanges();
+                    return RedirectToAction("CartView", "Cart");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while adding the product to the cart." + ex);
+
+                // Debug statement to log the exception
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+
+            return View(veg);
+        }
+
         [HttpGet]
         public ActionResult Create()
         {

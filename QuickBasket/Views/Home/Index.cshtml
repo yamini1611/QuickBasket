@@ -12,7 +12,7 @@
 
     #heading {
         color: white !important;
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+        font-size:25px;
     }
 
     #ca {
@@ -22,6 +22,7 @@
     div {
         font-family: worksans;
     }
+
     #card1 {
         padding: 65px;
         background-repeat: no-repeat;
@@ -33,25 +34,30 @@
         color: white;
         background-color: rgba(56, 18, 190, 0.411);
     }
+
     #fruit {
         font-size: 23px;
         color: white;
-       text-align:center;
+        text-align: center;
         background-color: rgba(56, 18, 190, 0.411);
     }
+
     #card2 {
         padding: 65px;
         background-repeat: no-repeat;
         background-image: url(https://tse1.mm.bing.net/th?id=OIP.Ry88qqyfE4VHLKPB6ZiOFwHaFj&pid=Api&P=0&h=180)
     }
-    a{
-        text-decoration:none;
+
+    a {
+        text-decoration: none;
     }
+
     #card3 {
         padding: 65px;
         background-repeat: no-repeat;
         background-image: url(https://tse1.mm.bing.net/th?id=OIP.nBIjsW4P_Am9iA6FD_I7bgHaE7&pid=Api&P=0&h=180)
     }
+
     #card4 {
         background-image: url(https://tse2.mm.bing.net/th?id=OIP.vxr32RBAZJJwSFzbAKBpaQHaE7&pid=Api&P=0&h=180);
         padding: 65px;
@@ -63,78 +69,206 @@
         padding: 65px;
         background-repeat: no-repeat;
     }
-    .card{
-        border:none;
+
+    .card {
+        border: none;
+    }
+
+    #carouselExampleIndicators {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    #caro img {
+        max-width: 100%;
+        height: auto;
     }
 </style>
 <div>
     <div class="Xq4jof BYn1Fg"><h3 id="heading" class="text-center">Delivering In</h3><h3 id="heading" class="text-center">8 Mins</h3></div>
 
     <div>
-        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
-            <div class="carousel-inner">
-                <div class="carousel-item active" data-interval="1000">
-                    <img src="https://cdn.zeptonow.com/production///tr:w-969,ar-969-501,pr-true,f-webp,q-80/inventory/banner/e0a7493d-8f9e-4456-834a-9761127a1602-BANNER_CAROUSEL_WITHOUT_TITLE_1_-_2023-08-25T191551.380.png" id="ca" height="580" width="70" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item" data-interval="1000">
-                    <img src="https://cdn.zeptonow.com/production///tr:w-981,ar-981-342,pr-true,f-webp,q-80/inventory/banner/f379dffe-c60c-48a4-897e-c9e78136f3a4-Premium_promo_(2).png" height="580" width="70" class="d-block w-100" id="ca" alt="...">
-                </div>
-                <div class="carousel-item" data-interval="1000">
-                    <img src="https://cdn.zeptonow.com/production///tr:w-969,ar-969-501,pr-true,f-webp,q-80/inventory/banner/e4362d67-c551-4417-8635-536fd972dd59-Banner_carousel_(34).png" height="580" width="70" class="d-block w-100" id="ca" alt="...">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+
+        <div class="card">
+            <img src="https://cdn.zeptonow.com/production///tr:w-981,ar-981-342,pr-true,f-webp,q-80/inventory/banner/b46053ce-e6ac-47cd-9606-6b5596925e8b-Premium_promo_entry_point__(3).png" alt="cardimg" />
         </div>
 
-        <div class="row mt-3">
-            <h2>Shop by Category</h2>
-            <div class="col-md-3">
-                <a href="~/Vegetable/Index">
-                    <div class="card" id="card1">
-                        <h3 id="veg">Vegetables</h3>
+        <div class="row justify-content-center mt-4">
+            <div class="col-5">
+                <div id="carouselExampleIndicators1" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide-to="2" aria-label="Slide 3"></button>
                     </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a href="~/Fruit/Index">
-                    <div class="card" id="card2">
-                        <h3 id="fruit">Fruit</h3>
+                    <div class="carousel-inner" id="caro">
+                        <div class="carousel-item active" data-interval="1000">
+                            <img src="https://cdn.zeptonow.com/production///tr:w-969,ar-969-501,pr-true,f-webp,q-80/inventory/banner/0e5c74bc-3c7a-45ec-a390-35124d99be35-BANNER_CAROUSEL_BCH_(1).png" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item" data-interval="1000">
+                            <img src="https://cdn.zeptonow.com/production///tr:w-969,ar-969-501,pr-true,f-webp,q-80/inventory/banner/bdaa68df-b988-4e89-9998-30374aeff37e-BANNER_CAROUSEL_WITHOUT_TITLE_1.png" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item" data-interval="1000">
+                            <a href="~/PackedFood/UserIndex"><img src="https://cdn.zeptonow.com/production///tr:w-969,ar-969-501,pr-true,f-webp,q-80/inventory/banner/cb0e1b9b-707b-4c0f-97ae-86b4e42bcb38-BANNER_CAROUSEL_WITHOUT_TITLE_1_-_Rahul_Lodha_(1).png" class="d-block w-100" alt="..."></a>
+                        </div>
                     </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a href="~/Meat/Index">
-                    <div class="card" id="card3">
-                        <h3 id="fruit">Meat</h3>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a href="~/Flowers/Index" >
-                    <div class="card" id="card4">
-                        <h3 id="fruit">Flowers</h3>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-3 mt-4">
-            <a href="~/PackedFood/Index">
-                <div class="card" id="card5">
-                    <h3 id="fruit">Packed Foods</h3>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-            </a>
+            </div>
+            <div class="col-5">
+                <div id="carouselExampleIndicators2" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner" id="caro">
+
+                        <div class="carousel-item active" data-interval="1000">
+                            <img src="https://cdn.zeptonow.com/production///tr:w-969,ar-969-501,pr-true,f-webp,q-80/inventory/banner/e0a7493d-8f9e-4456-834a-9761127a1602-BANNER_CAROUSEL_WITHOUT_TITLE_1_-_2023-08-25T191551.380.png" id="ca" height="580" width="70" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item" data-interval="1000">
+                            <img src="https://cdn.zeptonow.com/production///tr:w-969,ar-969-501,pr-true,f-webp,q-80/inventory/banner/9e4f713b-f342-4438-96c3-fc2c87531243-Banner-carousel_(6).png" height="500" width="70" class="d-block w-100" id="ca" alt="...">
+                        </div>
+                        <div class="carousel-item" data-interval="1000">
+                            <img src="https://cdn.zeptonow.com/production///tr:w-969,ar-969-501,pr-true,f-webp,q-80/inventory/banner/e4362d67-c551-4417-8635-536fd972dd59-Banner_carousel_(34).png" height="580" width="70" class="d-block w-100" id="ca" alt="...">
+
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
         </div>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-3">
+                <a href="~/PackedFood/Addtocart/4">
+                    <div class="card">
+
+                        <img src="https://cdn.zeptonow.com/production///tr:w-912,ar-912-1179,pr-true,f-webp,q-80/inventory/banner/0e0fd049-d5ad-47de-b542-367fa4df25a7-SUPER_HERO_BANNER_CAROUSEL_Brand_-_Rahul_Lodha.png" />
+                    </div>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="~/Meat/Addtocart/3">
+                    <div class="card">
+                        <img src="https://cdn.zeptonow.com/production///tr:w-912,ar-912-1179,pr-true,f-webp,q-80/inventory/banner/0132944d-408b-4e75-abbf-09bc3bdd8f5c-SUPER_HERO_BANNER_CAROUSEL_Brand_(4)_-_Rajeshree_Salvi.png" />
+
+                    </div>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="~/PackedFood/Addtocart/3">
+                    <div class="card">
+                        <img src="https://cdn.zeptonow.com/production///tr:w-912,ar-912-1179,pr-true,f-webp,q-80/inventory/banner/272bec51-124f-48eb-8ec7-bb6588d1ae41-SUPER_HERO_BANNER_CAROUSEL_Brand_(2)_-_Rahul_Lodha.png" />
+
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            if (User.IsInRole("Users"))
+            {
+                <div class="row mt-5 justify-content-center">
+                    <h2>Shop by Category</h2>
+                    <div class="col-md-3">
+                        <a href="~/Vegetable/UserIndex">
+                            <div class="card" id="card1">
+                                <h3 id="veg">Vegetables</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="~/Fruit/UserIndex">
+                            <div class="card" id="card2">
+                                <h3 id="fruit">Fruit</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="~/Meat/UserIndex">
+                            <div class="card" id="card3">
+                                <h3 id="fruit">Meat</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="~/Flowers/UserIndex">
+                            <div class="card" id="card4">
+                                <h3 id="fruit">Flowers</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mt-4">
+                        <a href="~/PackedFood/UserIndex">
+                            <div class="card" id="card5">
+                                <h3 id="fruit">Packed Foods</h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row mt-3">
+                    <h2>Shop by Category</h2>
+                    <div class="col-md-3">
+                        <a href="~/Vegetable/Index">
+                            <div class="card" id="card1">
+                                <h3 id="veg">Vegetables</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="~/Fruit/Index">
+                            <div class="card" id="card2">
+                                <h3 id="fruit">Fruit</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="~/Meat/Index">
+                            <div class="card" id="card3">
+                                <h3 id="fruit">Meat</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="~/Flowers/Index">
+                            <div class="card" id="card4">
+                                <h3 id="fruit">Flowers</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mt-4">
+                        <a href="~/PackedFood/Index">
+                            <div class="card" id="card5">
+                                <h3 id="fruit">Packed Foods</h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+
+
+
+
     </div>
 </div>

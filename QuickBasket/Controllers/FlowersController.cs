@@ -12,12 +12,79 @@ namespace QuickBasket.Controllers
     public class FlowersController : Controller
     {
         // GET: Flowers
-        public DOTNETEntities1 entities = new DOTNETEntities1();
+        private readonly DOTNETEntities8 entities = new DOTNETEntities8();
         public ActionResult Index()
         {
-            List<Flower> FruitList = entities.Flowers.ToList();
-            return View(FruitList);
+            List<Flower> FlowerList = entities.Flowers.ToList();
+            return View(FlowerList);
         }
+
+        public ActionResult UserIndex()
+        {
+            List<Flower> FlowerList = entities.Flowers.ToList();
+            return View(FlowerList);
+        }
+        public ActionResult Addtocart(int? id)
+        {
+            Flower Veg = entities.Flowers.Find(id);
+            TempData["Flowerid"] = Veg.fid;
+            TempData["price"] = Veg.retailprice;
+            TempData["name"] = Veg.name;
+            TempData["image"] = Veg.image;
+            TempData["userid"] = Session["UserID"];
+            return View(Veg);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Addtocart(Flower veg, int quantity)
+        {
+            try
+            {
+                int? price = TempData["price"] as int?;
+                string name = TempData["name"] as string;
+                byte[] image = TempData["image"] as byte[];
+                int? userId = TempData["userid"] as int?;
+                int? fid = TempData["Flowerid"] as int?;
+
+                if (ModelState.IsValid)
+                {
+                    var existingCartItem = entities.Carts.SingleOrDefault(c => c.userid == userId && c.Flowerid == fid);
+
+                    if (existingCartItem != null)
+                    {
+                        existingCartItem.quantity += quantity;
+                        existingCartItem.price = price * existingCartItem.quantity;
+                    }
+                    else
+                    {                         
+
+                        var newCartItem = new Cart
+                        {
+                            Flowerid = fid.Value,
+                            userid = userId,
+                            quantity = quantity,
+                            image = image,
+                            name = name,
+                            price = price * quantity
+                        };
+
+                        entities.Carts.Add(newCartItem);
+                    }
+
+                    entities.SaveChanges();
+                    return RedirectToAction("CartView", "Cart");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while adding the product to the cart." + ex);
+            }
+
+            return View(veg);
+        }
+
+
         [HttpGet]
         public ActionResult Create()
         {

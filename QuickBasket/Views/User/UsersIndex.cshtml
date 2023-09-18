@@ -4,33 +4,36 @@
     ViewBag.Title = "UsersIndex";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    #tab{
+        border-color:crimson;
 
-<h2>UsersIndex</h2>
+    }
+    th{
+     
+        color:darkblue;
+    }
+</style>
+<h2>Users Details</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
+<table class="table table-bordered" id="tab">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Username)
+UserName       
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.password)
-        </th>
+Password        </th>
         <th>
-            @Html.DisplayNameFor(model => model.email)
-        </th>
+Email        </th>
         <th>
-            @Html.DisplayNameFor(model => model.phone)
-        </th>
+Phone        </th>
         <th>
-            @Html.DisplayNameFor(model => model.modified_date)
-        </th>
+Modified Date        </th>
         <th>
-            @Html.DisplayNameFor(model => model.Role.RoleName)
+Role         </th>
+        <th>
+            Action
         </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -54,9 +57,12 @@
             @Html.DisplayFor(modelItem => item.Role.RoleName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.userid }) |
-            @Html.ActionLink("Details", "Details", new { id=item.userid }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.userid })
+            <a href="@Url.Action("Edit" ,new {id=item.userid})"><i class="fa-regular fa-pen-to-square" style="color: #5cb85c;"></i></a>
+            <a href="@Url.Action("Details" ,new {id=item.userid})">  <i class="fa-solid fa-circle-info fa-lg"  style="color: #eae206;"></i></a>
+            <a href="@Url.Action("Delete" ,new {id=item.userid})">
+                <i class="fa-solid fa-trash fa-lg" style="color: #d9534f;"></i>
+            </a>
+
         </td>
     </tr>
 }

@@ -1,0 +1,54 @@
+﻿
+@model QuickBasket.Models.Order
+
+<button id="rzp-button1" hidden>Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key":"rzp_test_FM7r7jy6LpI1GA", 
+    "amount": "@Html.DisplayFor(model => model.Total_amount)", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "name": "@Html.DisplayFor(model => model.User.email)",
+    "image": "https://dotnettec.com/wp-content/uploads/2019/10/cropped-dotnettec_header_logo.png", // You can give your logo url
+    "order_id": "@Html.DisplayFor(model => model.RazorpayOrderId)",
+    "handler": function (response){
+       
+        document.getElementById('rzp_paymentid').value = response.razorpayOrderId;
+        document.getElementById('rzp_orderid').value = response.order_id;
+
+        // // Let's submit the form automatically
+        document.getElementById('rzp-paymentresponse').click();
+    },
+    "prefill": {
+        "name": "@HttpContext.Current.User.Identity.Name",
+        "email": "@Html.DisplayFor(model => model.User.email)",
+        "contact": "@Html.DisplayFor(model => model.User.phone)"
+    },
+    "notes": {
+        "address": "@Html.DisplayFor(model => model.address)"
+    },
+    "theme": {
+        "color": "#F37254"
+    }
+};
+var rzp1 = new Razorpay(options);
+
+//<!-- onload function -->
+window.onload = function(){
+    document.getElementById('rzp-button1').click();
+};
+
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+<!-- This form is hidden, and submit when payment successfully made -->
+@using (Html.BeginForm("OrderConfirmation", "Order" , new {id = Model.RazorpayOrderId}))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.Hidden("rzp_paymentid")
+    @Html.Hidden("rzp_orderid")
+    <button type="submit" id="rzp-paymentresponse" class="btn btn-primary" hidden>Submit</button>
+}

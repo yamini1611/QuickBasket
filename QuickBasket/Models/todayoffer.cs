@@ -14,12 +14,7 @@ namespace QuickBasket.Models
     
     public partial class todayoffer
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public todayoffer()
-        {
-            this.Orders = new HashSet<Order>();
-        }
-    
+        public Nullable<int> userid { get; set; }
         public int productid { get; set; }
         public string name { get; set; }
         public Nullable<int> originalcost { get; set; }
@@ -29,7 +24,6 @@ namespace QuickBasket.Models
         public string offer { get; set; }
         public string category { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -15,21 +15,14 @@ namespace QuickBasket.Models
     public partial class Order
     {
         public int orderid { get; set; }
+        public Nullable<System.DateTime> Placeddate { get; set; }
+        public Nullable<System.DateTime> Possibledelivery { get; set; }
+        public Nullable<int> Total_amount { get; set; }
+        public string products { get; set; }
         public Nullable<int> userid { get; set; }
-        public Nullable<int> vegid { get; set; }
-        public Nullable<int> fid { get; set; }
-        public Nullable<int> fruitid { get; set; }
-        public Nullable<int> mid { get; set; }
-        public Nullable<int> pacid { get; set; }
-        public Nullable<int> productid { get; set; }
-        public Nullable<int> quantity { get; set; }
+        public string address { get; set; }
+        public string RazorpayOrderId { get; set; }
     
-        public virtual Flower Flower { get; set; }
-        public virtual Fruit Fruit { get; set; }
-        public virtual Meat Meat { get; set; }
-        public virtual packedfood packedfood { get; set; }
-        public virtual todayoffer todayoffer { get; set; }
         public virtual User User { get; set; }
-        public virtual Vegetable Vegetable { get; set; }
     }
 }

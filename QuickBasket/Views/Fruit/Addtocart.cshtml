@@ -1,0 +1,192 @@
+﻿@model QuickBasket.Models.Fruit
+
+@{
+    ViewBag.Title = "Addtocart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #img {
+        height: 300px;
+        width: 400px;
+    }
+</style>
+
+<h2>Add to Cart</h2>
+
+<div>
+
+    <div class="row">
+        <div class="col-6">
+            <img src="data:image;base64,@Convert.ToBase64String(Model.image)" id="img" class="card-img-top" alt="Vegetable Image">
+
+        </div>
+        <div class="col-4">
+            <h2> ₹ @Html.DisplayFor(model => model.retailprice)</h2>
+            <h4 style="text-decoration:line-through"> ₹ @Html.DisplayFor(model => model.originalcost) </h4>
+            <h2>Quantity</h2>
+            <span class="down" onClick='decreaseCount()'>-</span>
+            <input type="number" id="quantity" name="quantity" value="1" min="1" max="5">
+            <span class="up" onClick='increaseCount()'>+</span>
+
+            <p>
+                @using (Html.BeginForm("Addtocart", "Fruit", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="quantity-hidden" name="quantity" value="1">
+                    <div class="btn-2">
+                        <a href=""><span> <input type="submit" value="Add to Cart" id="main-btn" /></span></a>
+                    </div>
+                    <style>
+
+                        #main-btn {
+                            background-color: transparent;
+                            color: white;
+                            border: none;
+                        }
+
+                        .btn-2 a:hover span #main-btn {
+                            color: black !important;
+                        }
+
+
+                        .center {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            min-height: 100vh;
+                            font-size: 24px;
+                        }
+
+
+
+                        footer a,
+                        .btn-1 a,
+                        .btn-2 a {
+                            text-decoration: none;
+                            border: 2px solid #010100;
+                            padding: 15px;
+                            color: #000;
+                            text-transform: uppercase;
+                            letter-spacing: 2px;
+                            position: relative;
+                            display: inline-block;
+                        }
+
+                        span {
+                            position: relative;
+                            /* z-index coz when we put bg to before and after this span text will not be visible */
+                            z-index: 3;
+                        }
+
+                        /* Button 1 styles */
+
+                        .btn-1 a::before {
+                            content: "";
+                            position: absolute;
+                            top: 5px;
+                            left: -2px;
+                            width: calc(100% + 6px);
+                            /*100% plus double the times left values*/
+                            height: calc(100% - 10px);
+                            background-color: #ffffff;
+                            transition: all 0.5s ease-in-out;
+                            transform: scaleY(1);
+                        }
+
+                        .btn-1 a:hover::before,
+                        .btn-2 a:hover::before {
+                            transform: scaleY(0);
+                        }
+
+                        .btn-1 a::after {
+                            content: "";
+                            position: absolute;
+                            left: 5px;
+                            top: -5px;
+                            width: calc(100% - 10px);
+                            /*100% plus double the times left values*/
+                            height: calc(100% + 10px);
+                            background-color: #ffffff;
+                            transition: all 0.5s ease-in-out;
+                            transform: scaleX(1);
+                        }
+                        /* Created by http://grohit.com/  */
+
+                        .btn-1 a:hover::after,
+                        .btn-2 a:hover::after {
+                            transform: scaleX(0);
+                        }
+
+                        /* Button 2 styles */
+
+                        .btn-2 a {
+                            color: #ffffff;
+                            transition: all 0.5s ease-in-out;
+                        }
+
+                            .btn-2 a:hover {
+                                color: #000000;
+                                transition: all 0.5s ease-in-out;
+                            }
+
+                            .btn-2 a::before {
+                                content: "";
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background-color: #000;
+                                transition: all 0.5s ease-in-out;
+                                transform: scaleY(1);
+                            }
+
+                            .btn-2 a::after {
+                                content: "";
+                                position: absolute;
+                                left: 0;
+                                top: 0;
+                                width: 100%;
+                                height: 100%;
+                                background-color: black;
+                                transition: all 0.5s ease-in-out;
+                                transform: scaleX(1);
+                            }
+                    </style>
+                }
+                @Html.ActionLink("Back to List", "Index")
+            </p>
+
+        </div>
+    </div>
+
+</div>
+
+
+   
+<script>
+    function increaseCount() {
+        var input = document.getElementById("quantity");
+        var hiddenInput = document.getElementById("quantity-hidden"); // Get the hidden input
+        var value = parseInt(input.value, 10);
+        value = isNaN(value) ? 1 : value;
+        if (value < 5) {
+            value++;
+        }
+        input.value = value;
+        hiddenInput.value = value; // Update the hidden input with the new value
+    }
+
+    function decreaseCount() {
+        var input = document.getElementById("quantity");
+        var hiddenInput = document.getElementById("quantity-hidden"); // Get the hidden input
+        var value = parseInt(input.value, 10);
+        value = isNaN(value) ? 1 : value;
+        if (value > 1) {
+            value--;
+        }
+        input.value = value;
+        hiddenInput.value = value; // Update the hidden input with the new value
+    }
+</script>

@@ -14,7 +14,7 @@ namespace QuickBasket.Controllers
     [AllowAnonymous]
     public class HomeController : Controller
     {
-        public DOTNETEntities1 entities = new DOTNETEntities1();
+        public DOTNETEntities8 entities = new DOTNETEntities8();
         [HttpGet]
         public ActionResult Login()
         {
@@ -34,9 +34,10 @@ namespace QuickBasket.Controllers
                     break;
 
                 default:
+                    Session["UserID"] = roleUser.userid;
+
                     FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, user.Username, DateTime.Now, DateTime.Now.AddMinutes(30), false, roleUser.Roles, FormsAuthentication.FormsCookiePath);
-                    string hash = FormsAuthentication.Encrypt(ticket)
-;
+                    string hash = FormsAuthentication.Encrypt(ticket);
                     HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
                     if (ticket.IsPersistent)
                     {
@@ -48,6 +49,7 @@ namespace QuickBasket.Controllers
             ViewBag.Message = message;
             return View(user);
         }
+
 
         public ActionResult Register()
         {
