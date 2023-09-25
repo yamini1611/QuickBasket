@@ -30,7 +30,7 @@ namespace QuickBasket.Models
         public virtual Flower Flower { get; set; }
         public virtual Meat Meat { get; set; }
         public virtual packedfood packedfood { get; set; }
-        public virtual User User { get; set; }
         public virtual Vegetable Vegetable { get; set; }
+        public virtual User User { get; set; }
     }
 }

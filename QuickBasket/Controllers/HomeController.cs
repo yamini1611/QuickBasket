@@ -1,6 +1,9 @@
-﻿using QuickBasket.Models;
+﻿using QuickBasket.Extensions;
+using QuickBasket.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -30,12 +33,21 @@ namespace QuickBasket.Controllers
             switch (roleUser.userid.Value)
             {
                 case -1:
+                    this.AddNotification("Email / Password is incorrect." ,notificationType:"Error");
                     message = "Email / Password is incorrect.";
                     break;
 
                 default:
                     Session["UserID"] = roleUser.userid;
+                    List<User> users = entities.Users.ToList();
+                    foreach(User userdetail in users )
+                    {
+                        if(roleUser.userid == userdetail.userid)
+                        {
+                            Session["Avatar"] = userdetail.Avatar;
 
+                        }
+                    }
                     FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, user.Username, DateTime.Now, DateTime.Now.AddMinutes(30), false, roleUser.Roles, FormsAuthentication.FormsCookiePath);
                     string hash = FormsAuthentication.Encrypt(ticket);
                     HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
@@ -58,16 +70,43 @@ namespace QuickBasket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Register([Bind(Include = "userid,Username,Roleid,password,email,phone ")] User newUser)
+        public ActionResult Register(User newUser, string capturedImageData) 
         {
             if (ModelState.IsValid)
             {
-                entities.Users.Add(newUser);
-                entities.SaveChanges();
-                return RedirectToAction("Login");
+                if (!string.IsNullOrEmpty(capturedImageData))
+                {
+                    capturedImageData = capturedImageData.Replace("data:image/jpeg;base64,", "");
+
+                    byte[] imageBytes = Convert.FromBase64String(capturedImageData);
+
+                    newUser.Avatar = imageBytes;
+                    entities.Users.Add(newUser);
+
+                    entities.SaveChanges();
+                    Debug.WriteLine("Redirecting to Login action");
+                    return RedirectToAction("Login");
+
+                }
+
             }
+
             return View();
         }
+
+        private bool IsBase64String(string s)
+        {
+            try
+            {
+                byte[] data = Convert.FromBase64String(s);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -79,6 +118,9 @@ namespace QuickBasket.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
+
+
+
 
     }
 }

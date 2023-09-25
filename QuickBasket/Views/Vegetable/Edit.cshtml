@@ -4,6 +4,7 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@Html.ActionLink("back", "Edit", "Vegetable", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
 
 <h2>Edit</h2>
 
@@ -50,7 +51,7 @@
             </div>
         </div>
 
- 
+
         <div class="form-group">
             @Html.LabelFor(model => model.image, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -83,9 +84,7 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

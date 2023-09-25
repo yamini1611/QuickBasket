@@ -4,14 +4,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
- 
+
     <script src="https://kit.fontawesome.com/d7200c44d8.js" crossorigin="anonymous"></script>
+    <link href="~/Content/toastr.css" rel="stylesheet" />
     <link rel="icon" href="@Url.Content("~/Content/Images/logo.png")" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+
     <style>
         #nav {
             background-color: #090633fd;
+            color: white;
+        }
+
+        #footer {
+            background-color: #09053dfd;
             color: white;
         }
 
@@ -23,10 +31,72 @@
         div {
             font-family: worksans;
         }
+
+        #search {
+            background: rgba(0, 0, 0, 0);
+            color: white;
+        }
+
+        #b {
+            text-decoration: none;
+            color: black;
+            background-color: gold;
+            padding: 8px;
+            margin: 20px;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        .nav-item.dropdown button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        #avatarimg{
+            width:48px;
+            height:40px;
+            padding-right:5px;
+            border-radius:20px;
+
+        }
+        /* Style the dropdown menu container */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            right: 0;
+            top: 100%;
+            min-width: 160px;
+            z-index: 1;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Style dropdown menu items */
+        .dropdown-item {
+            text-decoration: none;
+            color:black;
+            display: block;
+            transition: background-color 0.2s;
+        }
+
+            .dropdown-item:hover {
+                background-color: #f5f5f5;
+            }
+
+        /* Style the divider */
+        .dropdown-divider {
+            border-top: 1px solid #ccc;
+            margin: 8px 0;
+        }
+      
     </style>
 </head>
 <body>
-    <nav id="nav"  class="navbar navbar-expand-sm navbar-toggleable-sm ">
+    <nav id="nav" class="navbar navbar-expand-sm navbar-toggleable-sm ">
         <div class="container">
             <a href="~/Home/Index"> <img src="~/Content/Images/logo.png" height="100" width="160" alt="logimg" /></a>
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
@@ -35,40 +105,70 @@
             </button>
             @if (User.Identity.IsAuthenticated)
             {
+                byte[] Avatar = Session["Avatar"] as byte[];
+
                 if (User.IsInRole("Users"))
                 {
+
                     <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
 
                         <ul class="navbar-nav flex-grow-1 mt-2">
                             <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
                             <li>@Html.ActionLink("Cart", "CartView", "Cart", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
-                            <li>@Html.ActionLink("Your Orders", "ViewOrder" ,"Order", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
-                          
+                            <li>@Html.ActionLink("Orders", "ViewOrder", "Order", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
                         </ul>
-                        <ul class="navbar-nav navbar-right">
-                            <li class="nav-link" id="a"><i class="fa-solid fa-user fa-flip"></i> @HttpContext.Current.User.Identity.Name</li>
-                            <li>@Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "nav-link", @id = "ab" })</li>
+                        <ul class="navbar-nav ml-auto ">
+                            <li class="nav-item dropdown">
+                                <button class="nav-link dropdown-toggle text-white" id="userDropdownToggle">
+                                   <img  src="data:image;base64,@Convert.ToBase64String(Avatar)" id="avatarimg" /><span class="text-white">
+                              @HttpContext.Current.User.Identity.Name
+                             </span>   </button>
+                                <div class="dropdown-menu dropdown-menu-end" id="userDropdownMenu">
+                                    <a class="dropdown-item" href="@Url.Action("EditUser", "User", new { id = Session["UserID"] })">
+                                        Edit Profile
+                                    </a>
+
+                                    <div class="dropdown-divider text-white"></div>
+                                    <a class="dropdown-item" href="#">
+                                        @Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "dropdown-item" })
+                                    </a>
+                                </div>
+                            </li>
                         </ul>
+
+
+
 
                     </div>
                 }
 
                 if (User.IsInRole("Admin"))
-                {
+            {
         <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
 
             <ul class="navbar-nav ml-auto">
                 <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
                 <li>@Html.ActionLink("UserDetails", "UsersIndex", "User", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
-                <li class="ml-lg-auto">
-                    @Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "nav-link", @id = "a" })
-                </li>
-                <li class="ml-lg-2 mt-2">
-                    <h5>&hearts;@HttpContext.Current.User.Identity.Name</h5>
+                <li>@Html.ActionLink("Feedbacks", "Index", "Feedback", new { area = "" }, new { @class = "nav-link", @id = "a" })</li>
+
+            </ul>
+
+            <ul class="navbar-nav ml-auto ">
+                <li class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle text-white" id="userDropdownToggle">
+                        <i class="fas fa-user" style="color:white"></i><span class="text-white">
+                            @HttpContext.Current.User.Identity.Name
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end" id="userDropdownMenu">
+                        <a class="dropdown-item" href="#">
+                            @Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "dropdown-item" })
+                        </a>
+                    </div>
                 </li>
             </ul>
 
-
+           
         </div>
                 }
             }
@@ -83,17 +183,158 @@
                 </div>
             }
         </div>
-</nav>
-    <div class="container body-content">
+    </nav>
+    <div class="container-fluid body-content p-0">
+        @Html.Partial("_Notifications")
+
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+        <!-- Footer -->
+        <div class="container-fluid w-100 p-0">
+            <footer class="text-center text-lg-start " id="footer">
+                <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+                    <div class="me-5 d-none d-lg-block">
+                        <span>Get connected with us on social networks:</span>
+                    </div>
+                  
+                    <div>
+                        <a href="" class="me-4 link-secondary">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="" class="me-4 link-secondary">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="" class="me-4 link-secondary">
+                            <i class="fab fa-google"></i>
+                        </a>
+                        <a href="" class="me-4 link-secondary">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="" class="me-4 link-secondary">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="" class="me-4 link-secondary">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </section>
+                
+                <section class="">
+                    <div class="container text-center text-md-start mt-5">
+                        <div class="row mt-3">
+                            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                                <h6 class="text-uppercase fw-bold mb-4">
+                                    <i class="fas fa-gem me-3 "></i>QuickBasket
+                                </h6>
+                                <p>
+                                    QuickBasket is your one-stop online grocery store, offering a wide range of fresh produce, pantry essentials, and household items. With convenient delivery options and a user-friendly interface, we make grocery shopping a breeze. Experience the future of hassle-free shopping with QuickBasket.
+                                </p>
+                            </div>
+                     
+                            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4" style="text-decoration:none">
+                                <!-- Links -->
+                                <h6 class="text-uppercase fw-bold mb-4">
+                                    Products
+                                </h6>
+                                <p>
+                                    <a href="~/Vegetable/UserIndex" class="text-reset">Vegetables</a>
+                                </p>
+                                <p>
+                                    <a href="~/Fruit/UserIndex" class="text-reset">Fruits</a>
+                                </p>
+                                <p>
+                                    <a href="~/Flowers/UserIndex" class="text-reset">Flowers</a>
+                                </p>
+
+                            </div>
+                          
+                            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                                <h6 class="text-uppercase fw-bold mb-4" style="text-decoration:none">
+                                    Products
+                                </h6>
+                                <p>
+                                    <a href="~/Meat/UserIndex" class="text-reset">Meat</a>
+                                </p>
+                                <p>
+                                    <a href="~/PackedFood/UserIndex" class="text-reset">Packed Foods</a>
+                                </p>
+                                <p>
+                                    <a href="~/Order/ViewOrder" class="text-reset">Orders</a>
+                                </p>
+                                <p>
+                                    <a href="~/Feedback/Feedback" class="text-reset">Feedback</a>
+                                </p>
+                            </div>
+                       
+                            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                                <!-- Links -->
+                                <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                                <p><i class="fas fa-home me-3 "></i> New York, NY 10012, US</p>
+                                <p>
+                                    <i class="fas fa-envelope me-3 "></i>
+                                    yaminipriya1611@gmail.com
+                                </p>
+                                <p><i class="fas fa-phone me-3 "></i> 9944050247</p>
+                                <p><i class="fas fa-print me-3 "></i> + 01 234 567 89</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+           
+                <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+                    © @DateTime.Now.Year  Copyright:
+                    <a class="text-reset fw-bold" href="https://mdbootstrap.com/">QuickBasket.com</a>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Footer -->
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/toastr.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
 </html>
+
+<script>
+    $(function () {
+        setTimeout(function () {
+            $(".alert").alert('close');
+        }, 2000);
+    });
+
+
+    $(".close").click(function () {
+        $(this).closest(".alert").alert('close');
+    });
+
+
+    $(document).ready(function () {
+        $('input[name="productName"]').keypress(function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                console.log('Keypress detected');
+                $(this).closest('form').submit();
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $("#userDropdownToggle").click(function () {
+            $("#userDropdownMenu").toggle();
+        });
+
+    $(document).on("click", function (event) {
+        if (!$(event.target).closest(".nav-item.dropdown").length) {
+        $("#userDropdownMenu").hide();
+        }
+    });
+});
+
+
+
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+

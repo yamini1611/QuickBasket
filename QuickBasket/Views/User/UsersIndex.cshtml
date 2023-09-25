@@ -1,70 +1,141 @@
-﻿@model IEnumerable<QuickBasket.Models.User>
+﻿@model PagedViewModel<QuickBasket.Models.User>
 
 @{
     ViewBag.Title = "UsersIndex";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<style>
-    #tab{
-        border-color:crimson;
 
+@using QuickBasket.Models
+@using PagedList.Mvc
+
+<style>
+    #tab {
+        border-color: crimson;
     }
-    th{
-     
-        color:darkblue;
+
+    #th {
+        background-color: darkblue;
+        color: white;
+        text-align: center;
+    }
+
+    #card-img {
+        height: 70px;
+        width: 80px;
+    }
+
+    #tr {
+        background-color: aliceblue;
+        color: indigo
+    }
+
+    #div {
+        padding: 45px;
     }
 </style>
-<h2>Users Details</h2>
+@Html.ActionLink("back", "Index", "Home", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
 
-<table class="table table-bordered" id="tab">
-    <tr>
-        <th>
-UserName       
-        </th>
-        <th>
-Password        </th>
-        <th>
-Email        </th>
-        <th>
-Phone        </th>
-        <th>
-Modified Date        </th>
-        <th>
-Role         </th>
-        <th>
-            Action
-        </th>
-    </tr>
+<h2 class="text-center">Users Details</h2>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Username)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.password)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.phone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.modified_date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Role.RoleName)
-        </td>
-        <td>
-            <a href="@Url.Action("Edit" ,new {id=item.userid})"><i class="fa-regular fa-pen-to-square" style="color: #5cb85c;"></i></a>
-            <a href="@Url.Action("Details" ,new {id=item.userid})">  <i class="fa-solid fa-circle-info fa-lg"  style="color: #eae206;"></i></a>
-            <a href="@Url.Action("Delete" ,new {id=item.userid})">
-                <i class="fa-solid fa-trash fa-lg" style="color: #d9534f;"></i>
-            </a>
+<div class="search-container">
+    @using (Html.BeginForm("UsersIndex", "User", FormMethod.Post))
+    {
+        <div class="input-group mb-3  justify-content-end pe-3">
+            <input type="text" name="searchQuery" class="form-control" placeholder="Search by Username, Email, or Role">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-dark">Search</button>
+            </div>
+        </div>
+    }
+</div>
 
-        </td>
-    </tr>
-}
+<div id="div">
 
-</table>
+
+    <table class="table table-bordered" id="tab">
+        <tr id="th">
+            <th>
+                UserName
+            </th>
+
+            <th>
+                Email
+            </th>
+            <th>
+                Phone
+            </th>
+            <th>
+                Modified Date
+            </th>
+            <th>
+                Role
+            </th>
+            <th>
+                Avatar
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Items)
+        {
+            <tr id="tr">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.modified_date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role.RoleName)
+                </td>
+
+                <td>
+                    <img src="data:image;base64,@Convert.ToBase64String(item.Avatar)" class="card-img-top" alt="Image" id="card-img">
+
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit" ,new {id=item.userid})"><i class="fa-regular fa-pen-to-square" style="color: #5cb85c;"></i></a>
+                    <a href="@Url.Action("Details" ,new {id=item.userid})">  <i class="fa-solid fa-circle-info fa-lg" style="color: #eae206;"></i></a>
+                    <a href="@Url.Action("Delete" ,new {id=item.userid})">
+                        <i class="fa-solid fa-trash fa-lg" style="color: #d9534f;"></i>
+                    </a>
+
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <div class="pagination-container" style="display: flex; justify-content: center;">
+        <ul class="pagination">
+
+            @if (Model.HasPreviousPage)
+            {
+                <li>@Html.ActionLink("<<", "UsersIndex", new { page = 1 }, new { @class = "page-link" })</li>
+                <li>@Html.ActionLink("<", "UsersIndex", new { page = Model.PageNumber - 1 }, new { @class = "page-link" })</li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="@(i == Model.PageNumber ? "active" : "")">
+                    @Html.ActionLink(i.ToString(), "UsersIndex", new { page = i }, new { @class = "page-link" })
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li>@Html.ActionLink(">", "UsersIndex", new { page = Model.PageNumber + 1 }, new { @class = "page-link" })</li>
+                <li>@Html.ActionLink(">>", "UsersIndex", new { page = Model.TotalPages }, new { @class = "page-link" })</li>
+            }
+        </ul>
+    </div>
+</div>

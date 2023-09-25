@@ -1,4 +1,6 @@
-﻿using QuickBasket.Models;
+﻿using PagedList;
+using QuickBasket.Extensions;
+using QuickBasket.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,23 +8,42 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-
 namespace QuickBasket.Controllers
 {
     public class FlowersController : Controller
     {
         // GET: Flowers
         private readonly DOTNETEntities8 entities = new DOTNETEntities8();
+
         public ActionResult Index()
         {
             List<Flower> FlowerList = entities.Flowers.ToList();
             return View(FlowerList);
         }
 
-        public ActionResult UserIndex()
+        public ActionResult UserIndex(string searchTerm, int? page)
         {
-            List<Flower> FlowerList = entities.Flowers.ToList();
-            return View(FlowerList);
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+
+            var packedfoodList = entities.Flowers.ToList();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                searchTerm = searchTerm.ToLower();
+                packedfoodList = packedfoodList
+                    .Where(p => p.name != null && p.name.ToLower().Contains(searchTerm))
+                    .ToList();
+            }
+
+            var pagedPackedFoods = packedfoodList.ToPagedList(pageNumber, pageSize);
+
+            if (pagedPackedFoods.Count == 0 && !string.IsNullOrEmpty(searchTerm))
+            {
+                this.AddNotification("Searched product is not found.", NotificationType.ERROR);
+            }
+
+            return View(pagedPackedFoods);
         }
         public ActionResult Addtocart(int? id)
         {
@@ -70,15 +91,20 @@ namespace QuickBasket.Controllers
                         };
 
                         entities.Carts.Add(newCartItem);
+
                     }
 
                     entities.SaveChanges();
+                    this.AddNotification("Product Added To Cart", NotificationType.SUCCESS);
+
                     return RedirectToAction("CartView", "Cart");
                 }
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "An error occurred while adding the product to the cart." + ex);
+                TempData["ErrorMessage"] = "Error adding product to cart. Please try again.";
+
             }
 
             return View(veg);
@@ -109,6 +135,8 @@ namespace QuickBasket.Controllers
                 }
                 entities.Flowers.Add(flower);
                 entities.SaveChanges();
+                this.AddNotification("Product Added Successfully", NotificationType.SUCCESS);
+
                 return RedirectToAction("Index");
             }
 
@@ -129,6 +157,8 @@ namespace QuickBasket.Controllers
 ;
             entities.Flowers.Remove(flower);
             entities.SaveChanges();
+            this.AddNotification("Product deleted Successfully", NotificationType.SUCCESS);
+
             return RedirectToAction("Index");
         }
 
@@ -137,31 +167,46 @@ namespace QuickBasket.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Errror400");
             }
 
             Flower flower = entities.Flowers.Find(id);
             return View(flower);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "fid ,name ,originalcost ,retailprice ,stock ,image ,offer,category")] Flower flower , HttpPostedFileBase imageFile)
+        public ActionResult Edit([Bind(Include = "fid, name, originalcost, retailprice, stock, image, offer, category")] Flower flower, HttpPostedFileBase imageFile)
         {
             if (ModelState.IsValid)
             {
-                if (imageFile != null && imageFile.ContentLength > 0)
+                Flower currentFlower = entities.Flowers.Find(flower.fid);
+
+                if (currentFlower != null)
                 {
-                    using (var reader = new BinaryReader(imageFile.InputStream))
+                    currentFlower.name = flower.name;
+                    currentFlower.originalcost = flower.originalcost;
+                    currentFlower.retailprice = flower.retailprice;
+                    currentFlower.stock = flower.stock;
+                    currentFlower.offer = flower.offer;
+                    currentFlower.category = flower.category;
+
+                    if (imageFile != null && imageFile.ContentLength > 0)
                     {
-                        flower.image = reader.ReadBytes(imageFile.ContentLength);
+                        using (var reader = new BinaryReader(imageFile.InputStream))
+                        {
+                            currentFlower.image = reader.ReadBytes(imageFile.ContentLength);
+                        }
                     }
+
+                    entities.Entry(currentFlower).State = System.Data.Entity.EntityState.Modified;
+                    entities.SaveChanges();
+                    this.AddNotification("Product Edited Successfully", NotificationType.SUCCESS);
+
+                    return RedirectToAction("Index", "Flowers");
                 }
-                entities.Entry(flower).State = System.Data.Entity.EntityState.Modified;
-                entities.SaveChanges();
-                return RedirectToAction("Index", "Flowers");
             }
-            return View();
+            return View(flower);
         }
+
     }
 }

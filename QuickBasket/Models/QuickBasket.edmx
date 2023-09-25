@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DOTNETModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DOTNETModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Cart">
           <Key>
             <PropertyRef Name="cartid" />
@@ -20,6 +20,17 @@
           <Property Name="image" Type="varbinary(max)" />
           <Property Name="name" Type="varchar" MaxLength="40" />
           <Property Name="price" Type="int" />
+        </EntityType>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="Fid" />
+          </Key>
+          <Property Name="Fid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="36" />
+          <Property Name="Email" Type="varchar" MaxLength="30" />
+          <Property Name="Feedback" Type="varchar(max)" />
+          <Property Name="rating" Type="varchar" MaxLength="50" />
+          <Property Name="userid" Type="int" />
         </EntityType>
         <EntityType Name="Flower">
           <Key>
@@ -113,11 +124,12 @@
           </Key>
           <Property Name="userid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Username" Type="varchar" MaxLength="20" />
-          <Property Name="password" Type="varchar" MaxLength="20" />
+          <Property Name="password" Type="varchar" MaxLength="100" />
           <Property Name="modified_date" Type="datetime" />
           <Property Name="email" Type="varchar" MaxLength="25" />
           <Property Name="Roleid" Type="int" />
           <Property Name="phone" Type="varchar" MaxLength="10" />
+          <Property Name="Avatar" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Vegetable">
           <Key>
@@ -246,6 +258,7 @@
         </Function>
         <EntityContainer Name="DOTNETModelStoreContainer">
           <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Flower" EntityType="Self.Flower" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Fruit" EntityType="Self.Fruit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Meat" EntityType="Self.Meat" Schema="dbo" store:Type="Tables" />
@@ -292,8 +305,7 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DOTNETModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -316,8 +328,8 @@
           <NavigationProperty Name="Flower" Relationship="Self.FK__Cart__Flowerid__671F4F74" FromRole="Cart" ToRole="Flower" />
           <NavigationProperty Name="Meat" Relationship="Self.FK__Cart__mid__69FBBC1F" FromRole="Cart" ToRole="Meat" />
           <NavigationProperty Name="packedfood" Relationship="Self.FK__Cart__pacid__681373AD" FromRole="Cart" ToRole="packedfood" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Cart__userid__625A9A57" FromRole="Cart" ToRole="Users" />
           <NavigationProperty Name="Vegetable" Relationship="Self.FK__Cart__vegid__634EBE90" FromRole="Cart" ToRole="Vegetable" />
+          <NavigationProperty Name="User" Relationship="DOTNETModel.FK__Cart__userid__625A9A57" FromRole="Cart" ToRole="User" />
         </EntityType>
         <EntityType Name="Flower">
           <Key>
@@ -373,7 +385,7 @@
           <Property Name="userid" Type="Int32" />
           <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="RazorpayOrderId" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Orders__userid__793DFFAF" FromRole="Orders" ToRole="Users" />
+          <NavigationProperty Name="User" Relationship="DOTNETModel.FK__Orders__userid__793DFFAF" FromRole="Order" ToRole="User" />
         </EntityType>
         <EntityType Name="packedfood">
           <Key>
@@ -395,7 +407,7 @@
           </Key>
           <Property Name="Roleid" Type="Int32" Nullable="false" />
           <Property Name="RoleName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Users" Relationship="Self.FK__Users__Roleid__3C69FB99" FromRole="Roles" ToRole="Users" />
+          <NavigationProperty Name="Users" Relationship="DOTNETModel.FK__Users__Roleid__3C69FB99" FromRole="Role" ToRole="User" />
         </EntityType>
         <EntityType Name="todayoffer">
           <Key>
@@ -410,23 +422,7 @@
           <Property Name="image" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="offer" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="category" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="User" Relationship="Self.FK__todayoffe__useri__3587F3E0" FromRole="todayoffer" ToRole="Users" />
-        </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="userid" />
-          </Key>
-          <Property Name="userid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="modified_date" Type="DateTime" Precision="3" />
-          <Property Name="email" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="Roleid" Type="Int32" />
-          <Property Name="phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Carts" Relationship="Self.FK__Cart__userid__625A9A57" FromRole="Users" ToRole="Cart" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__userid__793DFFAF" FromRole="Users" ToRole="Orders" />
-          <NavigationProperty Name="Role" Relationship="Self.FK__Users__Roleid__3C69FB99" FromRole="Users" ToRole="Roles" />
-          <NavigationProperty Name="todayoffers" Relationship="Self.FK__todayoffe__useri__3587F3E0" FromRole="Users" ToRole="todayoffer" />
+          <NavigationProperty Name="User" Relationship="DOTNETModel.FK__todayoffe__useri__3587F3E0" FromRole="todayoffer" ToRole="User" />
         </EntityType>
         <EntityType Name="Vegetable">
           <Key>
@@ -490,18 +486,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Cart__userid__625A9A57">
-          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
-          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="userid" />
-            </Principal>
-            <Dependent Role="Cart">
-              <PropertyRef Name="userid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Cart__vegid__634EBE90">
           <End Role="Vegetable" Type="Self.Vegetable" Multiplicity="0..1" />
           <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
@@ -514,42 +498,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__userid__793DFFAF">
-          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="userid" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="userid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Users__Roleid__3C69FB99">
-          <End Role="Roles" Type="Self.Role" Multiplicity="0..1" />
-          <End Role="Users" Type="Self.User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="Roleid" />
-            </Principal>
-            <Dependent Role="Users">
-              <PropertyRef Name="Roleid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__todayoffe__useri__3587F3E0">
-          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
-          <End Role="todayoffer" Type="Self.todayoffer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="userid" />
-            </Principal>
-            <Dependent Role="todayoffer">
-              <PropertyRef Name="userid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="DOTNETEntities8" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Carts" EntityType="Self.Cart" />
           <EntitySet Name="Flowers" EntityType="Self.Flower" />
@@ -559,7 +507,6 @@
           <EntitySet Name="packedfoods" EntityType="Self.packedfood" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="todayoffers" EntityType="Self.todayoffer" />
-          <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="Vegetables" EntityType="Self.Vegetable" />
           <AssociationSet Name="FK__Cart__fid__65370702" Association="Self.FK__Cart__fid__65370702">
             <End Role="Fruit" EntitySet="Fruits" />
@@ -577,35 +524,113 @@
             <End Role="packedfood" EntitySet="packedfoods" />
             <End Role="Cart" EntitySet="Carts" />
           </AssociationSet>
-          <AssociationSet Name="FK__Cart__userid__625A9A57" Association="Self.FK__Cart__userid__625A9A57">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Cart" EntitySet="Carts" />
-          </AssociationSet>
           <AssociationSet Name="FK__Cart__vegid__634EBE90" Association="Self.FK__Cart__vegid__634EBE90">
             <End Role="Vegetable" EntitySet="Vegetables" />
             <End Role="Cart" EntitySet="Carts" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Orders__userid__793DFFAF" Association="Self.FK__Orders__userid__793DFFAF">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Users__Roleid__3C69FB99" Association="Self.FK__Users__Roleid__3C69FB99">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="Users" EntitySet="Users" />
-          </AssociationSet>
-          <AssociationSet Name="FK__todayoffe__useri__3587F3E0" Association="Self.FK__todayoffe__useri__3587F3E0">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="todayoffer" EntitySet="todayoffers" />
           </AssociationSet>
           <FunctionImport Name="Validate_User" ReturnType="Collection(DOTNETModel.Validate_User_Result)">
             <Parameter Name="Username" Mode="In" Type="String" />
             <Parameter Name="Password" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Users" EntityType="DOTNETModel.User" />
+          <AssociationSet Name="FK__Cart__userid__625A9A57" Association="DOTNETModel.FK__Cart__userid__625A9A57">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__userid__793DFFAF" Association="DOTNETModel.FK__Orders__userid__793DFFAF">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__Roleid__3C69FB99" Association="DOTNETModel.FK__Users__Roleid__3C69FB99">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__todayoffe__useri__3587F3E0" Association="DOTNETModel.FK__todayoffe__useri__3587F3E0">
+            <End Role="User" EntitySet="Users" />
+            <End Role="todayoffer" EntitySet="todayoffers" />
+          </AssociationSet>
+          <EntitySet Name="Feedbacks" EntityType="DOTNETModel.Feedback" />
         </EntityContainer>
         <ComplexType Name="Validate_User_Result">
           <Property Type="Int32" Name="userid" Nullable="true" />
           <Property Type="String" Name="Roles" Nullable="true" MaxLength="20" />
         </ComplexType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="userid" />
+          </Key>
+          <Property Name="userid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="modified_date" Type="DateTime" Precision="3" />
+          <Property Name="email" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Roleid" Type="Int32" />
+          <Property Name="phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Avatar" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Carts" Relationship="DOTNETModel.FK__Cart__userid__625A9A57" FromRole="User" ToRole="Cart" />
+          <NavigationProperty Name="Orders" Relationship="DOTNETModel.FK__Orders__userid__793DFFAF" FromRole="User" ToRole="Order" />
+          <NavigationProperty Name="Role" Relationship="DOTNETModel.FK__Users__Roleid__3C69FB99" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="todayoffers" Relationship="DOTNETModel.FK__todayoffe__useri__3587F3E0" FromRole="User" ToRole="todayoffer" />
+        </EntityType>
+        <Association Name="FK__Cart__userid__625A9A57">
+          <End Type="DOTNETModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="DOTNETModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__userid__793DFFAF">
+          <End Type="DOTNETModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="DOTNETModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__Roleid__3C69FB99">
+          <End Type="DOTNETModel.Role" Role="Role" Multiplicity="0..1" />
+          <End Type="DOTNETModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Roleid" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="Roleid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__todayoffe__useri__3587F3E0">
+          <End Type="DOTNETModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="DOTNETModel.todayoffer" Role="todayoffer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="todayoffer">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="Fid" />
+          </Key>
+          <Property Name="Fid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Feedback1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="rating" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="userid" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -722,19 +747,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="DOTNETModel.User">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="userid" ColumnName="userid" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="modified_date" ColumnName="modified_date" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="Roleid" ColumnName="Roleid" />
-                <ScalarProperty Name="phone" ColumnName="phone" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Vegetables">
             <EntityTypeMapping TypeName="DOTNETModel.Vegetable">
               <MappingFragment StoreEntitySet="Vegetable">
@@ -757,6 +769,32 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="DOTNETModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="Roleid" ColumnName="Roleid" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="modified_date" ColumnName="modified_date" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feedbacks">
+            <EntityTypeMapping TypeName="DOTNETModel.Feedback">
+              <MappingFragment StoreEntitySet="Feedback">
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="Feedback1" ColumnName="Feedback" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Fid" ColumnName="Fid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickBasket", "QuickBasket\QuickBasket.csproj", "{CD0712BD-9D67-4312-9A77-76D234B05A6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web API", "Web API\Web API.csproj", "{FDE5767B-2619-452B-81B1-346AB610611F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{CD0712BD-9D67-4312-9A77-76D234B05A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD0712BD-9D67-4312-9A77-76D234B05A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD0712BD-9D67-4312-9A77-76D234B05A6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDE5767B-2619-452B-81B1-346AB610611F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDE5767B-2619-452B-81B1-346AB610611F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDE5767B-2619-452B-81B1-346AB610611F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDE5767B-2619-452B-81B1-346AB610611F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

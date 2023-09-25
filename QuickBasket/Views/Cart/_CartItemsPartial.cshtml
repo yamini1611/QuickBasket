@@ -1,0 +1,55 @@
+﻿@model IEnumerable<QuickBasket.Models.Cart>
+
+<table class="table table-bordered text-center container m-5 p-5">
+    <!-- Table header -->
+    <tr>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        if (item.User != null && item.User.userid == (int)Session["UserID"])
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.name)</td>
+                <td>
+                    <img src="data:image;base64,@Convert.ToBase64String(item.image)" alt="Vegetable Image" id="img">
+                </td>
+                <td class="d-flex justify-content-center mt-3">
+                    <form method="post" data-ajax="true" data-ajax-url="@Url.Action("UpdateCart", "Cart")" data-ajax-method="post" data-ajax-update="#cartItems">
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("cartId", item.cartid)
+                        @Html.Hidden("isIncrement", true)
+                        <button class="btn btn-dark" type="submit">+</button>
+                    </form>
+                    <span class="quantity-display ms-2 me-2 mt-2">@Html.DisplayFor(modelItem => item.quantity)</span>
+                    <!-- Decrement quantity form -->
+                    <form method="post" data-ajax="true" data-ajax-url="@Url.Action("UpdateCart", "Cart")" data-ajax-method="post" data-ajax-update="#cartItems">
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("cartId", item.cartid)
+                        @Html.Hidden("isIncrement", false)
+                        <button class="btn btn-dark" type="submit">-</button>
+                    </form>
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.price)</td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.cartid }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    }
+
+    <tr>
+        <td colspan="3"></td>
+        <td>
+            Total amount: <span id="totalAmount">@Model.Sum(item => item.price)</span>
+        </td>
+        <td>
+            <button id="proceedToPayment" class="btn btn-dark">Proceed to Payment</button>
+        </td>
+    </tr>
+</table>

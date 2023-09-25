@@ -9,6 +9,8 @@
     var userOrders = Model.Where(order => order.User.userid == (int)Session["UserID"]).ToList();
 }
 
+@Html.ActionLink("back", "Index", "Home", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
+
 @if (Session["UserID"] != null)
 {
     if (userOrders.Any())
@@ -24,7 +26,7 @@
                                 <h4 class="card-title">Order ID: @Html.DisplayFor(modelItem => item.RazorpayOrderId)</h4>
                                 <p class="card-text">Placed Date: @Html.DisplayFor(modelItem => item.Placeddate)</p>
                                 <p class="card-text">Possible Delivery: @Html.DisplayFor(modelItem => item.Possibledelivery)</p>
-                                <p class="card-text">Total Amount: @Html.DisplayFor(modelItem => item.Total_amount)</p>
+                                <p class="card-text">Total Amount: ₹  @Html.DisplayFor(modelItem => item.Total_amount)</p>
                                 <p class="card-text">Products: @Html.DisplayFor(modelItem => item.products)</p>
                                 <p class="card-text">Delivery Address: @Html.DisplayFor(modelItem => item.address)</p>
                             </div>
@@ -37,7 +39,7 @@
     else
     {
         <div class="container mt-5">
-            <div class="alert alert-info">
+            <div class="card">
                 <h4>You don't have any orders.</h4>
                 <p><a href="~/Home/Index" class="btn btn-dark">Order Now</a></p>
             </div>
@@ -53,3 +55,13 @@ else
         </div>
     </div>
 }
+<style>
+    .card:nth-child(2n) {
+        background-color: lightblue;
+    }
+
+    .card:nth-child(odd) {
+        background-color: cornsilk;
+    }
+
+</style>

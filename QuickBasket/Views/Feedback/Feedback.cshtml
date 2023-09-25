@@ -1,0 +1,108 @@
+﻿@model IEnumerable<QuickBasket.Models.Feedback>
+
+
+@{
+    ViewBag.Title = "Feedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    /* Container styles */
+    .container {
+        margin-top: 30px;
+    }
+
+    /* Card styles */
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form title styles */
+    .card-title {
+        color: #333;
+    }
+
+    /* Form input styles */
+    .form-control {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    /* Textarea styles */
+    textarea.form-control {
+        resize: vertical;
+    }
+
+    /* Rating dropdown styles */
+    .form-select {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    /* Submit button styles */
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        padding: 12px 30px;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    /* Center align elements */
+    .text-center {
+        text-align: center;
+    }
+</style>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4">Feedback Form</h4>
+                    <form class="text-start ms-5" method="post" action="@Url.Action("Feedback", "Feedback")">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label"> Name</label>
+                            <input type="text" class="form-control" id="customerName" name="Name" placeholder="John Doe" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="Email" placeholder="johndoe@example.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="feedback" class="form-label">Feedback</label>
+                            <textarea class="form-control" id="feedback" name="Feedback1" rows="4" placeholder="Please share your feedback here..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Rating</label>
+                            <select class="form-select" id="rating" name="Rating" required>
+                                <option value="" disabled selected>Select a rating</option>
+                                <option value="5">5 - Excellent</option>
+                                <option value="4">4 - Very Good</option>
+                                <option value="3">3 - Good</option>
+                                <option value="2">2 - Fair</option>
+                                <option value="1">1 - Poor</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

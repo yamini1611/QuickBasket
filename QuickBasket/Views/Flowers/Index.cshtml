@@ -4,17 +4,26 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@Html.ActionLink("back", "Index", "Home", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
 
 <style>
     #card-img {
         height: 150px;
         width: contain;
-        max-width:85%;
-        align-items:center;
+        max-width: 85%;
+        align-items: center;
+    }
+
+    #c {
+        text-decoration: none;
+        color: white;
+        background-color: black;
+        padding: 5px;
     }
 </style>
+<h2 class="text-center">Flower Varieties</h2>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create", "Create", new { @class = "btn btn-dark btn-sm" }, new { @id = "c" })
 </p>
 
 <div class="row">

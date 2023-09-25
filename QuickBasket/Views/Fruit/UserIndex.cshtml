@@ -1,5 +1,6 @@
-﻿@model IEnumerable<QuickBasket.Models.Fruit>
-
+﻿@model IPagedList<QuickBasket.Models.Fruit>
+@using PagedList
+@using PagedList.Mvc
 
 <style>
     #card-img {
@@ -56,60 +57,89 @@
     }
 </style>
 
+@Html.ActionLink("back", "Index", "Home", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
 
-<div class="row">
-    @foreach (var item in Model)
+<div class="container">
+    @using (Html.BeginForm("UserIndex", "Fruit", FormMethod.Get))
     {
-<div class="col-md-3 mb-4">
-    <div class="card">
-        <a href="@Url.Action("Addtocart", new {id = item.fid }) ">
-            <img src="data:image;base64,@Convert.ToBase64String(item.image)" class="card-img-top" alt="Vegetable Image" id="card-img">
-        </a>
-            <div class="card-body">
-            <h5 class="card-title text-center">@Html.DisplayFor(modelItem => item.name)</h5>
-
-            <div class="text-center">
-                <button type="button" id="view" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#viewveg@(item.fid)">View</button>
+        <div class="row mt-2 ">
+            <div class="col-md-12 ">
+                <h2 class="text-center">
+                    Fruitful Choices: Explore Fresh Fruits Online!
+                </h2>
+                <div class="input-group mb-3 justify-content-end mt-2 ">
+                    <h4 class="me-3 mt-2">Search </h4>@Html.TextBox("searchTerm", null, new { @class = "form-control", placeholder = "Search by Product Name" })
+                    <button type="submit" class="btn btn-dark">Search</button>
+                </div>
             </div>
-
         </div>
-    </div>
-</div>
-}
+    }
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <a href="@Url.Action("Addtocart", new {id = item.fid }) ">
+                        <img src="data:image;base64,@Convert.ToBase64String(item.image)" class="card-img-top" alt="Vegetable Image" id="card-img">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title text-center">@Html.DisplayFor(modelItem => item.name)</h5>
 
-    <!-- Modal -->
-    @foreach (var item in Model)
-    {
-<div class="modal fade" id="viewveg@(item.fid)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">@Html.DisplayFor(modelItem => item.name) </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-5">
-                            <img src="data:image;base64,@Convert.ToBase64String(item.image)" class="card-img-top" alt="Vegetable Image" id="modal-card-img">
+                        <div class="text-center">
+                            <button type="button" id="view" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#viewveg@(item.fid)">View</button>
                         </div>
-                        <div class="col-6">
-                            <div class="card-text p-5 text-start ms-2">
-                                <h1 style="font-size:35px">@Html.DisplayFor(modelItem => item.name) </h1>
-                                <h3> ₹@Html.DisplayFor(modelItem => item.retailprice) <span> / Kg</span> </h3>
-                                <h5 id="oc"> ₹@Html.DisplayFor(modelItem => item.originalcost) </h5>
-                                <br>
-                                <h2> @Html.DisplayFor(modelItem => item.offer) Off </h2>
-                             
+
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="pagination-container" style="display: flex; justify-content: center;">
+            <ul class="pagination">
+                @for (int i = Model.PageNumber - 1; i <= Model.PageNumber + 1; i++)
+                {
+                    if (i >= 1 && i <= Model.PageCount)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            @Html.ActionLink(i.ToString(), "UserIndex", new { page = i, searchTerm = Request.QueryString["searchTerm"] }, new { @class = "page-link" })
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <!-- Modal -->
+        @foreach (var item in Model)
+        {
+            <div class="modal fade" id="viewveg@(item.fid)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">@Html.DisplayFor(modelItem => item.name) </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <img src="data:image;base64,@Convert.ToBase64String(item.image)" class="card-img-top" alt="Vegetable Image" id="modal-card-img">
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card-text p-5 text-start ms-2">
+                                            <h1 style="font-size:35px">@Html.DisplayFor(modelItem => item.name) </h1>
+                                            <h3> ₹@Html.DisplayFor(modelItem => item.retailprice) <span> / Kg</span> </h3>
+                                            <h5 id="oc"> ₹@Html.DisplayFor(modelItem => item.originalcost) </h5>
+                                            <br>
+                                            <h2> @Html.DisplayFor(modelItem => item.offer) Off </h2>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            </div>
-    </div>
-</div>
-}
+        }
 
+    </div>
 </div>
 

@@ -4,17 +4,25 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@Html.ActionLink("back", "Index", "Home", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
 
-<h2>Index</h2>
+<h2 class="text-center">Packed Foods</h2>
 <style>
     #card-img {
         height: 240px;
         width: contain;
-
     }
+
+    #c {
+        text-decoration: none;
+        color: white;
+        background-color: black;
+        padding: 5px;
+    }
+  
 </style>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create", "Create", new { @class = "btn btn-dark btn-sm" }, new { @id = "c" })
 </p>
 
 <div class="row">

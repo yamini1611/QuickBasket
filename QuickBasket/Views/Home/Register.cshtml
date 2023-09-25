@@ -5,38 +5,54 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Register", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "registrationForm" }))
 {
     @Html.AntiForgeryToken()
-    <div class="card custom-card mt-5 ms-5">
-        <div class="card-header bg-dark text-white">
-            <h2 class="text-center">Registration Form</h2>
-        </div>
+    <div id="divtotal">
+        <div class="row justify-content-center">
+            <div class="card custom-card mt-5 ms-md-5 ">
+                <div class="card-header ">
+                    <h2 class="text-center">Registration Form</h2>
+                </div>
 
-        <div class="card-body">
-            <div class="form-group mt-3 mb-3 ">
-                @Html.LabelFor(m => m.Username)
-                @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.Username)
-            </div>
-            <div class="form-group mb-3">
-                @Html.LabelFor(m => m.password)
-                @Html.PasswordFor(m => m.password, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.password)
-            </div>
-            <div class="form-group mb-3">
-                @Html.LabelFor(m => m.email)
-                @Html.TextBoxFor(m => m.email, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.email)
-            </div>
-            <div class="form-group mb-3">
-                @Html.LabelFor(m => m.phone)
-                @Html.TextBoxFor(m => m.phone, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.phone)
-            </div>
-            <div class="form-group mb-3">
-                <button type="submit" class="btn btn-danger">Register</button>
-                @Html.ActionLink("Already a User", "Login")
+                <div class="card-body">
+                    <div class="form-group mt-3 mb-3">
+                        Username
+                        @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @PlaceHolder = "Enter Username" })
+                        @Html.ValidationMessageFor(m => m.Username)
+                    </div>
+                    <div class="form-group mb-3">
+                        Password
+                        @Html.PasswordFor(m => m.password, new { @class = "form-control", @PlaceHolder = "Enter password" })
+                        @Html.ValidationMessageFor(m => m.password)
+                    </div>
+                    <div class="form-group mb-3">
+                        Email
+                        @Html.TextBoxFor(m => m.email, new { @class = "form-control", @PlaceHolder = "Enter Email" })
+                        @Html.ValidationMessageFor(m => m.email)
+                    </div>
+                    <div class="form-group mb-3">
+                        Phone
+                        @Html.TextBoxFor(m => m.phone, new { @class = "form-control", @PlaceHolder = "Enter Phone" })
+                        @Html.ValidationMessageFor(m => m.phone)
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="AvatarFile">Avatar</label>
+                        <div id="cameraContainer">
+                            <button type="button" id="captureButton" class="btn btn-primary">Capture</button>
+                            <canvas id="canvas" style="display: none; height:200px;width:300px"></canvas>
+                            <img id="capturedImage" style="display: none;" alt="Captured Image">
+                            <input type="hidden" id="capturedImageData" name="capturedImageData">
+                            @Html.ValidationMessageFor(m => m.Avatar)
+                        </div>
+                    </div>
+
+
+                    <div class="form-group mb-3">
+                        <button type="submit" class="btn btn-danger">Register</button>
+                        <a href="@Url.Action("Login", "Home")" class="btn btn-warning">Already have an Account</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -44,7 +60,101 @@
 
 <style>
     .card {
-        width: 450px
+        width: 450px;
+        background-color: black;
+        color: white;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    }
+
+    #divtotal {
+        overflow-x: hidden;
+    }
+
+    a {
+        text-decoration: none;
+    }
+    .field-validation-error {
+        color: red;
     }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const capturedImage = document.getElementById('capturedImage');
+        const capturedImageDataInput = document.getElementById('capturedImageData');
+        const form = $('#registrationForm');
+        const submitButton = $('#submitButton');
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    const cameraPreview = document.createElement('video');
+                    $('body').append(cameraPreview);
+                    cameraPreview.srcObject = stream;
+                    cameraPreview.play();
+                })
+                .catch(function (error) {
+                    console.error('Error accessing camera:', error);
+                });
+
+            let isImageCaptured = false;
+
+
+            $('#captureButton').click(function () {
+                const cameraPreview = document.querySelector('video');
+                canvas.width = cameraPreview.videoWidth;
+                canvas.height = cameraPreview.videoHeight;
+                ctx.drawImage(cameraPreview, 0, 0, canvas.width, canvas.height);
+                capturedImage.src = canvas.toDataURL('image/jpeg');
+
+                const capturedImageBase64 = canvas.toDataURL('image/jpeg');
+
+                capturedImageDataInput.value = capturedImageBase64;
+
+                capturedImage.style.display = 'block';
+
+                isImageCaptured = true;
+
+                submitButton.prop('disabled', false);
+            });
+            console.log('Starting script...');
+
+            form.submit(function (e) {
+                if (!isImageCaptured) {
+                    e.preventDefault();
+                    alert('Please capture an image before submitting.');
+                } else {
+                    submitButton.prop('disabled', true);
+
+                    const formData = new FormData(form[0]);
+
+                    formData.append('capturedImageData', capturedImageDataInput.value);
+
+                    $.ajax({
+                        url: form.attr('action'),
+                        type: form.attr('method'),
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data);
+                        },
+                        error: function (error) {
+                            console.error('Form submission error:', error);
+                        }
+                    });
+                }
+            });
+
+        } else {
+            console.error('getUserMedia is not supported by this browser.');
+        }
+    });
+</script>
+
+
+
 

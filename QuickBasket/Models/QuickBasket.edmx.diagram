@@ -13,17 +13,18 @@
         <EntityTypeShape EntityType="DOTNETModel.packedfood" Width="1.5" PointX="3" PointY="20.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DOTNETModel.Role" Width="1.5" PointX="0.75" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DOTNETModel.todayoffer" Width="1.5" PointX="5.25" PointY="12.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DOTNETModel.User" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DOTNETModel.Vegetable" Width="1.5" PointX="3" PointY="23.625" IsExpanded="true" />
         <AssociationConnector Association="DOTNETModel.FK__Cart__fid__65370702" ManuallyRouted="false" />
         <AssociationConnector Association="DOTNETModel.FK__Cart__Flowerid__671F4F74" ManuallyRouted="false" />
         <AssociationConnector Association="DOTNETModel.FK__Cart__mid__69FBBC1F" ManuallyRouted="false" />
         <AssociationConnector Association="DOTNETModel.FK__Cart__pacid__681373AD" ManuallyRouted="false" />
-        <AssociationConnector Association="DOTNETModel.FK__Cart__userid__625A9A57" ManuallyRouted="false" />
         <AssociationConnector Association="DOTNETModel.FK__Cart__vegid__634EBE90" ManuallyRouted="false" />
-        <AssociationConnector Association="DOTNETModel.FK__Orders__userid__793DFFAF" ManuallyRouted="false" />
-        <AssociationConnector Association="DOTNETModel.FK__Users__Roleid__3C69FB99" ManuallyRouted="false" />
-        <AssociationConnector Association="DOTNETModel.FK__todayoffe__useri__3587F3E0" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DOTNETModel.User" Width="1.5" PointX="3" PointY="4.5" />
+        <AssociationConnector Association="DOTNETModel.FK__Cart__userid__625A9A57" />
+        <AssociationConnector Association="DOTNETModel.FK__Orders__userid__793DFFAF" />
+        <AssociationConnector Association="DOTNETModel.FK__Users__Roleid__3C69FB99" />
+        <AssociationConnector Association="DOTNETModel.FK__todayoffe__useri__3587F3E0" />
+        <EntityTypeShape EntityType="DOTNETModel.Feedback" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

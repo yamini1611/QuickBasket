@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Error404";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #error404 {
+        display: block;
+        margin: 0 auto;
+        max-width: 600px;
+        min-width: 280px;
+        width: 50%;
+        height:450px;
+    }
+</style>
+
+<div class="text-center">
+    <h3 class="text-center">Page not found.</h3>
+    <pre>
+        Our apologies, this is almost certainly not the page you were looking for.
+        Please try again or visit our <a href="~/Home/Index">home page</a>.
+    </pre>
+    <img src="https://www.newyorker.com/static/error/error-404.png" id="error404" />
+</div>
+

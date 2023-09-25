@@ -1,0 +1,62 @@
+﻿@model IEnumerable<QuickBasket.Models.Feedback>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    th {
+        background-color: darkblue !important;
+        color: white;
+    }
+
+    table {
+        color: midnightblue;
+    }
+
+    tr {
+        color: indigo !important;
+    }
+</style>
+<h2 class="text-center">Feedbacks</h2>
+
+
+<table class="table m-5 container table-bordered">
+    <tr class="text-center">
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            Feedback
+        </th>
+        <th>
+Rating
+        </th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr class="text-center">
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Feedback1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.rating)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Fid }, new { style = "background-color: brown; color: white; padding: 6px; text-decoration: none;" })
+            </td>
+        </tr>
+    }
+
+</table>

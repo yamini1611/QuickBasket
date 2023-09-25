@@ -1,37 +1,23 @@
-﻿using Antlr.Runtime.Misc;
-using Microsoft.AspNet.Identity;
-using QuickBasket.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Drawing.Printing;
-using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Razor.Parser.SyntaxTree;
-using System.Web.UI.WebControls;
+using QuickBasket.Extensions;
+using QuickBasket.Models;
 
 namespace QuickBasket.Controllers
 {
+
     public class CartController : Controller
     {
-        private readonly DOTNETEntities8  entities = new DOTNETEntities8();
+        private readonly DOTNETEntities8 entities = new DOTNETEntities8();
 
         public ActionResult CartView()
-        { 
+        {
             List<Cart> cart = entities.Carts.ToList();
             return View(cart);
-
         }
-        public ActionResult Edit(int? id)
-        {
-            Cart cart = entities.Carts.Find(id);
-            return View(cart);
-        }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -41,27 +27,64 @@ namespace QuickBasket.Controllers
 
             if (cart != null)
             {
+                int? stock = GetStockForCart(cart);
+
                 if (isIncrement)
                 {
-                    cart.quantity += 1;
+                    if (stock > 0)
+                    {
+                        cart.quantity += 1;
+                        UpdateStock(cart, -1);
+                    }
+                    else
+                    {
+                        TempData["Message"] = "You can't choose a quantity greater than available stock.";
+                    }
                 }
                 else
                 {
                     if (cart.quantity > 1)
                     {
                         cart.quantity -= 1;
+                        UpdateStock(cart, 1);
                     }
                 }
 
                 cart.price = CalculateUpdatedPrice(cart);
 
-                UpdateStock(cart, isIncrement);
-
                 entities.Entry(cart).State = EntityState.Modified;
                 entities.SaveChanges();
+
             }
 
             return RedirectToAction("CartView");
+        }
+
+
+        private int? GetStockForCart(Cart cart)
+        {
+            if (cart.Vegetable != null)
+            {
+                return cart.Vegetable.stock;
+            }
+            else if (cart.Fruit != null)
+            {
+                return cart.Fruit.stock;
+            }
+            else if (cart.Flower != null)
+            {
+                return cart.Flower.stock;
+            }
+            else if (cart.packedfood != null)
+            {
+                return cart.packedfood.stock;
+            }
+            else if (cart.Meat != null)
+            {
+                return cart.Meat.stock;
+            }
+
+            return 0;
         }
 
         private int? CalculateUpdatedPrice(Cart cart)
@@ -94,64 +117,33 @@ namespace QuickBasket.Controllers
                 return cart.Meat.retailprice;
             }
 
-            return null;
+            return 0;
         }
 
-        public void UpdateStock(Cart cart, bool isIncrement)
+        public void UpdateStock(Cart cart, int changeAmount)
         {
-            if (isIncrement) 
+            if (cart.Vegetable != null)
             {
-                if (cart.Vegetable != null)
-                {
-                    cart.Vegetable.stock -= 1;
-                }
-                else if (cart.Fruit != null)
-                {
-                    cart.Fruit.stock -= 1;
-                }
-
-                else if (cart.Flower != null)
-                {
-                    cart.Flower.stock -= 1;
-                }
-                else if (cart.Meat != null)
-                {
-                    cart.Meat.stock -= 1;
-
-                }
-                else if (cart.packedfood != null)
-                {
-                    cart.packedfood.stock -= 1;
-                }
+                cart.Vegetable.stock += changeAmount;
 
             }
-            else 
+            else if (cart.Fruit != null)
             {
-                if (cart.Vegetable != null)
-                {
-                    cart.Vegetable.stock += 1;
-                }
-                else if (cart.Fruit != null)
-                {
-                    cart.Fruit.stock += 1;
-                }
-                else if (cart.Flower != null)
-                {
-                    cart.Flower.stock += 1;
-                }
-                else if (cart.Meat!= null)
-                {
-                    cart.Meat.stock += 1;
-                }
-                else if (cart.packedfood != null)
-                {
-                    cart.packedfood.stock += 1;
-                }
-
-
+                cart.Fruit.stock += changeAmount;
+            }
+            else if (cart.Flower != null)
+            {
+                cart.Flower.stock += changeAmount;
+            }
+            else if (cart.packedfood != null)
+            {
+                cart.packedfood.stock += changeAmount;
+            }
+            else if (cart.Meat != null)
+            {
+                cart.Meat.stock += changeAmount;
             }
         }
-
 
         public ActionResult Delete(int? id)
         {
@@ -159,7 +151,7 @@ namespace QuickBasket.Controllers
 
             if (cart == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("Errror400");
             }
 
             if (cart.Vegetable != null)
@@ -167,30 +159,40 @@ namespace QuickBasket.Controllers
                 var vegetable = cart.Vegetable;
                 vegetable.stock += cart.quantity;
                 entities.Carts.Remove(cart);
+                this.AddNotification("Product Removed from cart", NotificationType.SUCCESS);
+
             }
             else if (cart.Fruit != null)
             {
                 var fruit = cart.Fruit;
                 fruit.stock += cart.quantity;
                 entities.Carts.Remove(cart);
+                this.AddNotification("Product Removed from cart", NotificationType.SUCCESS);
+
             }
             else if (cart.Flower != null)
             {
                 var flower = cart.Flower;
                 flower.stock += cart.quantity;
                 entities.Carts.Remove(cart);
+                this.AddNotification("Product Removed from cart", NotificationType.SUCCESS);
+
             }
             else if (cart.Meat != null)
             {
                 var meat = cart.Meat;
                 meat.stock += cart.quantity;
                 entities.Carts.Remove(cart);
+                this.AddNotification("Product Removed from cart", NotificationType.SUCCESS);
+
             }
             else if (cart.packedfood != null)
             {
                 var packedfood = cart.packedfood;
                 packedfood.stock += cart.quantity;
                 entities.Carts.Remove(cart);
+                this.AddNotification("Product Removed from cart", NotificationType.SUCCESS);
+
             }
             else
             {
@@ -200,8 +202,5 @@ namespace QuickBasket.Controllers
             entities.SaveChanges();
             return RedirectToAction("CartView");
         }
-
     }
 }
-
-

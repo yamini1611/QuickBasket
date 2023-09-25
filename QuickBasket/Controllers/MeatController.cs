@@ -1,4 +1,6 @@
-﻿using QuickBasket.Models;
+﻿using PagedList;
+using QuickBasket.Extensions;
+using QuickBasket.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,10 +21,29 @@ namespace QuickBasket.Controllers
             List<Meat> MeatList = entities.Meats.ToList();
             return View(MeatList);
         }
-        public ActionResult UserIndex()
+        public ActionResult UserIndex(string searchTerm, int? page)
         {
-            List<Meat> MeatList = entities.Meats.ToList();
-            return View(MeatList);
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+
+            var packedfoodList = entities.Meats.ToList();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                searchTerm = searchTerm.ToLower();
+                packedfoodList = packedfoodList
+                    .Where(p => p.name != null && p.name.ToLower().Contains(searchTerm))
+                    .ToList();
+            }
+
+            var pagedPackedFoods = packedfoodList.ToPagedList(pageNumber, pageSize);
+
+            if (pagedPackedFoods.Count == 0 && !string.IsNullOrEmpty(searchTerm))
+            {
+                this.AddNotification("Searched product is not found.", NotificationType.ERROR);
+            }
+
+            return View(pagedPackedFoods); // Return a PagedList instead of IEnumerable
         }
 
         public ActionResult Addtocart(int? id)
@@ -72,6 +93,8 @@ namespace QuickBasket.Controllers
                         };
 
                         entities.Carts.Add(newCartItem);
+                        this.AddNotification("Product Added To Cart", NotificationType.SUCCESS);
+
                     }
 
                     entities.SaveChanges();
@@ -82,7 +105,6 @@ namespace QuickBasket.Controllers
             {
                 ModelState.AddModelError("", "An error occurred while adding the product to the cart." + ex);
 
-                // Debug statement to log the exception
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
 
@@ -111,8 +133,13 @@ namespace QuickBasket.Controllers
                         meat.image = reader.ReadBytes(imageFile.ContentLength);
                     }
                 }
+                else
+                {
+                    return RedirectToAction("Errror400");
+                }
                 entities.Meats.Add(meat);
                 entities.SaveChanges();
+                this.AddNotification("Product Added Successfully", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
 
@@ -133,6 +160,8 @@ namespace QuickBasket.Controllers
 ;
             entities.Meats.Remove(meat);
             entities.SaveChanges();
+            this.AddNotification("Product removed Successfully", NotificationType.SUCCESS);
+
             return RedirectToAction("Index");
         }
 
@@ -141,7 +170,7 @@ namespace QuickBasket.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Errror400");
             }
 
             Meat meat = entities.Meats.Find(id);
@@ -150,23 +179,41 @@ namespace QuickBasket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "mid ,name ,originalcost ,retailprice ,stock ,image ,offer,category")] Meat meat, HttpPostedFileBase imageFile)
+        public ActionResult Edit([Bind(Include = "mid, name, originalcost, retailprice, stock, image, offer, category")] Meat meat, HttpPostedFileBase imageFile)
         {
             if (ModelState.IsValid)
             {
-                if (imageFile != null && imageFile.ContentLength > 0)
+                Meat currentmeat = entities.Meats.Find(meat.mid);
+
+                if (currentmeat != null)
                 {
-                    using (var reader = new BinaryReader(imageFile.InputStream))
+                    currentmeat.name = meat.name;
+                    currentmeat.originalcost = meat.originalcost;
+                    currentmeat.retailprice = meat.retailprice;
+                    currentmeat.stock = meat.stock;
+                    currentmeat.offer = meat.offer;
+                    currentmeat.category = meat.category;
+
+                    if (imageFile != null && imageFile.ContentLength > 0)
                     {
-                        meat.image = reader.ReadBytes(imageFile.ContentLength);
+                        using (var reader = new BinaryReader(imageFile.InputStream))
+                        {
+                            currentmeat.image = reader.ReadBytes(imageFile.ContentLength);
+                        }
                     }
+                    else
+                    {
+                        return RedirectToAction("Errror400");
+                    }
+                    entities.Entry(currentmeat).State = System.Data.Entity.EntityState.Modified;
+                    entities.SaveChanges();
+                    this.AddNotification("Product Edited Successfully", NotificationType.SUCCESS);
+
+                    return RedirectToAction("Index", "Meat");
                 }
-                entities.Entry(meat).State = System.Data.Entity.EntityState.Modified;
-                entities.SaveChanges();
-                return RedirectToAction("Index", "Meat");
             }
-            return View();
+            return View(meat);
         }
-    
-}
+
+    }
 }

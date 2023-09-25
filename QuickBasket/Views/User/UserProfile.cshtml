@@ -1,0 +1,23 @@
+﻿@model QuickBasket.Models.User
+    <style>
+        #b {
+            text-decoration: none;
+            color: black;
+            background-color: gold;
+            padding: 8px;
+            border-radius: 12px;
+        }
+    </style>
+@Html.ActionLink("back", "Index", "Home", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
+
+<h2>User Profile</h2>
+
+<div>
+    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Avatar)" alt="Avatar" />
+
+    <p>Username: @Model.Username</p>
+    <p>Email: @Model.email</p>
+    <p>Phone: @Model.phone</p>
+</div>
+
+

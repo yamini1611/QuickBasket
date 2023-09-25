@@ -35,8 +35,9 @@ namespace QuickBasket.Models
         public virtual DbSet<packedfood> packedfoods { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<todayoffer> todayoffers { get; set; }
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Vegetable> Vegetables { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Feedback> Feedbacks { get; set; }
     
         public virtual ObjectResult<Validate_User_Result> Validate_User(string username, string password)
         {

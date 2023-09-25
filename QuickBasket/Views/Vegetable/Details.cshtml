@@ -76,6 +76,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.vegid }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", new { id = Model.vegid } ,new {@id ="b"}) |
+    @Html.ActionLink("back", "UsersIndex", "Vegetable", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
 </p>

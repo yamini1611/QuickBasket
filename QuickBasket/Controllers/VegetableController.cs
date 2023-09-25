@@ -1,4 +1,5 @@
-﻿using QuickBasket.Models;
+﻿using QuickBasket.Extensions;
+using QuickBasket.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,27 +8,51 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
-
+using PagedList; 
 namespace QuickBasket.Controllers
 {
-
+    [Authorize]
     public class VegetableController : Controller
     {
         public DOTNETEntities8 entities = new DOTNETEntities8();
 
         // GET: Vegetable
+        [Authorize(Roles="Admin")]
         public ActionResult Index()
         {
             List<Vegetable> vegetableList = entities.Vegetables.ToList();
             return View(vegetableList);
         }
-        public ActionResult UserIndex()
+
+
+        public ActionResult UserIndex(string searchTerm, int? page)
         {
-            List<Vegetable> vegetableList = entities.Vegetables.ToList();
-            return View(vegetableList);
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+
+            var vegetableList = entities.Vegetables.ToList();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                searchTerm = searchTerm.ToLower();
+                vegetableList = vegetableList
+                    .Where(v => v.name != null && v.name.ToLower().Contains(searchTerm))
+                    .ToList();
+            }
+
+            // Create a PagedList from the filtered vegetableList
+            var pagedVegetables = vegetableList.ToPagedList(pageNumber, pageSize);
+
+            if (pagedVegetables.Count == 0 && !string.IsNullOrEmpty(searchTerm))
+            {
+                this.AddNotification("Searched product is not found.", NotificationType.ERROR);
+            }
+
+            return View(pagedVegetables);
         }
 
-      
+
+
 
         public ActionResult Addtocart(int? id)
         {
@@ -75,9 +100,12 @@ namespace QuickBasket.Controllers
                         };
 
                         entities.Carts.Add(newCartItem);
+
                     }
 
                     entities.SaveChanges();
+                    this.AddNotification("Product Added To Cart", NotificationType.SUCCESS);
+
                     return RedirectToAction("CartView", "Cart");
                 }
             }
@@ -113,8 +141,14 @@ namespace QuickBasket.Controllers
                         veg.image = reader.ReadBytes(imageFile.ContentLength);
                     }
                 }
+
+                else
+                {
+                    return RedirectToAction("Errror400");
+                }
                 entities.Vegetables.Add(veg);
                 entities.SaveChanges();
+                this.AddNotification("Product Added Successfully", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
 
@@ -135,6 +169,8 @@ namespace QuickBasket.Controllers
 ;
             entities.Vegetables.Remove(veg);
             entities.SaveChanges();
+            this.AddNotification("Product deleted Successfully", NotificationType.SUCCESS);
+
             return RedirectToAction("Index");
         }
 
@@ -143,7 +179,7 @@ namespace QuickBasket.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Errror400");
             }
 
             Vegetable veg = entities.Vegetables.Find(id);
@@ -152,24 +188,43 @@ namespace QuickBasket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "vegid ,name ,originalcost ,retailprice ,stock ,image ,offer,category")] Vegetable veg, HttpPostedFileBase imageFile)
+        public ActionResult Edit([Bind(Include = "vegid, name, originalcost, retailprice, stock, image, offer, category")] Vegetable veg, HttpPostedFileBase imageFile)
         {
             if (ModelState.IsValid)
             {
-                if (imageFile != null && imageFile.ContentLength > 0)
-                {
-                    using (var reader = new BinaryReader(imageFile.InputStream))
-                    {
-                        veg.image = reader.ReadBytes(imageFile.ContentLength);
-                    }
-                }
-                entities.Entry(veg).State = System.Data.Entity.EntityState.Modified;
-                entities.SaveChanges();
-                return RedirectToAction("Index" ,"Vegetable");
-            }
-            return View();
-        }
-    
+              Vegetable vegs = entities.Vegetables.Find(veg.vegid);
 
-}
+                if (vegs != null)
+                {
+                    vegs.name = veg.name;
+                    vegs.originalcost = veg.originalcost;
+                    vegs.retailprice = veg.retailprice;
+                    vegs.stock = veg.stock;
+                    vegs.offer = veg.offer;
+                    vegs.category = veg.category;
+
+                    if (imageFile != null && imageFile.ContentLength > 0)
+                    {
+                        using (var reader = new BinaryReader(imageFile.InputStream))
+                        {
+                            vegs.image = reader.ReadBytes(imageFile.ContentLength);
+                        }
+                    }
+
+                    entities.Entry(vegs).State = System.Data.Entity.EntityState.Modified;
+                    entities.SaveChanges();
+                    this.AddNotification("Product edited Successfully", NotificationType.SUCCESS);
+                    return RedirectToAction("Index", "Vegetable");
+                }
+
+                else
+                {
+                    return RedirectToAction("Errror400");
+                }
+            }
+            return View(veg);
+        }
+
+
+    }
 }

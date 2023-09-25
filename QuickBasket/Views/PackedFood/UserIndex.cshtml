@@ -1,4 +1,8 @@
-﻿@model IEnumerable<QuickBasket.Models.packedfood>
+﻿@model IPagedList<QuickBasket.Models.packedfood>
+@using PagedList
+@using PagedList.Mvc
+
+@Html.ActionLink("back", "Index", "Home", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
 
 <style>
     #card-img {
@@ -55,16 +59,31 @@
     }
 </style>
 
+<div class="container">
+    @using (Html.BeginForm("UserIndex", "PackedFood", FormMethod.Get))
+    {
+        <div class="row mt-2 ">
+            <div class="col-md-12 ">
+                <h2 class="text-center">
+                    Unwrap Flavor: Shop Packed Foods Online!
+                </h2>
+                <div class="input-group mb-3 justify-content-end mt-2 ">
+                    <h4 class="me-3 mt-2">Search </h4>@Html.TextBox("searchTerm", null, new { @class = "form-control", placeholder = "Search by Product Name" })
+                    <button type="submit" class="btn btn-dark">Search</button>
+                </div>
+            </div>
+        </div>
+    }
 
 <div class="row">
     @foreach (var item in Model)
     {
         <div class="col-md-3 mb-4">
             <div class="card">
-                <a href="@Url.Action("Addtocart", new {id = item.pacid }) " >
+                <a href="@Url.Action("Addtocart", new {id = item.pacid }) ">
                     <img src="data:image;base64,@Convert.ToBase64String(item.image)" class="card-img-top" alt="Vegetable Image" id="card-img">
                 </a>
-                    <div class="card-body">
+                <div class="card-body">
                     <h5 class="card-title text-center">@Html.DisplayFor(modelItem => item.name)</h5>
 
                     <div class="text-center">
@@ -108,6 +127,21 @@
             </div>
         </div>
     }
+    <div class="pagination-container" style="display: flex; justify-content: center;">
+        <ul class="pagination">
+            @for (int i = Model.PageNumber - 1; i <= Model.PageNumber + 1; i++)
+            {
+                if (i >= 1 && i <= Model.PageCount)
+                {
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                        @Html.ActionLink(i.ToString(), "UserIndex", new { page = i, searchTerm = Request.QueryString["searchTerm"] }, new { @class = "page-link" })
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+</div>
 
 </div>
 

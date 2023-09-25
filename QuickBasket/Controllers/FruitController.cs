@@ -1,4 +1,6 @@
-﻿using QuickBasket.Models;
+﻿using PagedList;
+using QuickBasket.Extensions;
+using QuickBasket.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,10 +22,29 @@ namespace QuickBasket.Controllers
             return View(FruitList);
         }
 
-        public ActionResult UserIndex()
+        public ActionResult UserIndex(string searchTerm, int? page)
         {
-            List<Fruit> FruitList = entities.Fruits.ToList();
-            return View(FruitList);
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+
+            var packedfoodList = entities.Fruits.ToList();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                searchTerm = searchTerm.ToLower();
+                packedfoodList = packedfoodList
+                    .Where(p => p.name != null && p.name.ToLower().Contains(searchTerm))
+                    .ToList();
+            }
+
+            var pagedPackedFoods = packedfoodList.ToPagedList(pageNumber, pageSize);
+
+            if (pagedPackedFoods.Count == 0 && !string.IsNullOrEmpty(searchTerm))
+            {
+                this.AddNotification("Searched product is not found.", NotificationType.ERROR);
+            }
+
+            return View(pagedPackedFoods); // Return a PagedList instead of IEnumerable
         }
         [HttpGet]
         public ActionResult Addtocart(int? id)
@@ -49,8 +70,6 @@ namespace QuickBasket.Controllers
                 int? userId = TempData["userid"] as int?;
                 int? fid = TempData["fid"] as int?;
 
-                // Debug statements to check the values
-                System.Diagnostics.Debug.WriteLine($"userId: {userId}, fid: {fid}, quantity: {quantity}");
 
                 if (ModelState.IsValid)
                 {
@@ -75,6 +94,8 @@ namespace QuickBasket.Controllers
                         };
 
                         entities.Carts.Add(newCartItem);
+                        this.AddNotification("Product Added To Cart", NotificationType.SUCCESS);
+
                     }
 
                     entities.SaveChanges();
@@ -85,7 +106,6 @@ namespace QuickBasket.Controllers
             {
                 ModelState.AddModelError("", "An error occurred while adding the product to the cart." + ex);
 
-                // Debug statement to log the exception
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
             }
 
@@ -113,8 +133,14 @@ namespace QuickBasket.Controllers
                         fruit.image = reader.ReadBytes(imageFile.ContentLength);
                     }
                 }
+
+                else
+                {
+                    return RedirectToAction("Errror400");
+                }
                 entities.Fruits.Add(fruit);
                 entities.SaveChanges();
+                this.AddNotification("Product Added Successfully", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
 
@@ -135,6 +161,8 @@ namespace QuickBasket.Controllers
 ;
             entities.Fruits.Remove(fruit);
             entities.SaveChanges();
+            this.AddNotification("Product deleted Successfully", NotificationType.SUCCESS);
+
             return RedirectToAction("Index");
         }
 
@@ -143,7 +171,7 @@ namespace QuickBasket.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Errror400");
             }
 
             Fruit fruit = entities.Fruits.Find(id);
@@ -152,22 +180,41 @@ namespace QuickBasket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "fid ,name ,originalcost ,retailprice ,stock ,image ,offer,category")] Fruit fruit, HttpPostedFileBase imageFile)
+        public ActionResult Edit([Bind(Include = "fid, name, originalcost, retailprice, stock, image, offer, category")] Fruit fruit, HttpPostedFileBase imageFile)
         {
             if (ModelState.IsValid)
             {
-                if (imageFile != null && imageFile.ContentLength > 0)
+                Fruit currentFruit = entities.Fruits.Find(fruit.fid);
+
+                if (currentFruit != null)
                 {
-                    using (var reader = new BinaryReader(imageFile.InputStream))
+                    currentFruit.name = fruit.name;
+                    currentFruit.originalcost = fruit.originalcost;
+                    currentFruit.retailprice = fruit.retailprice;
+                    currentFruit.stock = fruit.stock;
+                    currentFruit.offer = fruit.offer;
+                    currentFruit.category = fruit.category;
+
+                    if (imageFile != null && imageFile.ContentLength > 0)
                     {
-                        fruit.image = reader.ReadBytes(imageFile.ContentLength);
+                        using (var reader = new BinaryReader(imageFile.InputStream))
+                        {
+                            currentFruit.image = reader.ReadBytes(imageFile.ContentLength);
+                        }
                     }
+                    else
+                    {
+                        return RedirectToAction("Errror400");
+                    }
+                    entities.Entry(currentFruit).State = System.Data.Entity.EntityState.Modified;
+                    entities.SaveChanges();
+                    this.AddNotification("Product Edited Successfully", NotificationType.SUCCESS);
+
+                    return RedirectToAction("Index", "Fruit");
                 }
-                entities.Entry(fruit).State = System.Data.Entity.EntityState.Modified;
-                entities.SaveChanges();
-                return RedirectToAction("Index", "Fruit");
             }
-            return View();
+            return View(fruit);
         }
+
     }
 }

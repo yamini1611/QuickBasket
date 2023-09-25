@@ -4,19 +4,57 @@
     ViewBag.Title = "Order Confirmation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container">
-    <h2>Order Confirmation</h2>
 
-    <div class="alert alert-success">
-        <p>Thank you for placing your order with us. Your order details are as follows:</p>
+@Html.ActionLink("back", "Index", "Home", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
 
-        <p><strong>Order ID:</strong> @Model.RazorpayOrderId</p>
-        <p><strong>Total Amount:</strong>  ₹ @Model.Total_amount</p>
-        <p><strong>Products:</strong> @Model.products</p>
-        <p><strong>Delivery Address:</strong> @Model.address</p>
-        <p><strong>Possible Delivery Date:</strong> @Model.Possibledelivery.ToString()</p>
+<div class="container mt-3">
+    <h2 class="text-center">Order Confirmation</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="p-2">Thank you for placing your order with us. Your order details are as follows:</h4>
+
+            <h6><strong>Order ID:</strong> @Model.RazorpayOrderId</h6>
+            <h6><strong>Total Amount:</strong> ₹ @Model.Total_amount</h6>
+            <h6><strong>Products:</strong> @Model.products</h6>
+            <h6><strong>Delivery Address:</strong> @Model.address</h6>
+            <h6><strong>Possible Delivery Date:</strong> @Model.Possibledelivery.ToString()</h6>
+        </div>
     </div>
 
+    <div class="d-flex justify-content-center">
 
-    <p><a href="@Url.Action("Index", "Home")">Back to Home</a></p>
+
+
+        @using (Html.BeginForm("SendOrderEmail", "Order", new { razorpayOrderId = Model.RazorpayOrderId }, FormMethod.Post, new { id = "sendEmailForm" }))
+        {
+            @Html.Hidden("razorpayOrderId", Model.RazorpayOrderId)
+
+            <h5>
+                <button type="button" class="btn btn-dark mt-3" onclick="sendOrderEmail()">Do You want a mail for this Order</button>
+            </h5>
+        }
+
+        <h5>
+            <a href="~/Feedback/Feedback" class="btn btn-dark mt-3 ms-3">Please give your feedback</a>
+        </h5>
+
+    </div>
 </div>
+
+<style>
+    .card {
+        padding: 20px;
+        background-color: #08d7233e;
+    }
+</style>
+
+<script>
+    function sendOrderEmail() {
+        console.log("Before form submit");
+        document.getElementById("sendEmailForm").submit();
+        console.log("After form submit");
+    }
+</script>
+
+

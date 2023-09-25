@@ -5,20 +5,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+@Html.ActionLink("back", "Index", "Home", new { @class = "btn btn-dark btn-sm" }, new { @id = "b" })
 
 
-@using (Html.BeginForm())
+
+
+@using (Html.BeginForm("Edit", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>User</h4>
-        <hr />
+
+    <div class="form-horizontal ms-5 m-5">
+        <h4>Edit User</h4>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.userid)
 
-        <div class="form-group">
+        <div class="form-group ms-5">
             @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
@@ -26,15 +27,9 @@
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        
 
-        <div class="form-group">
+        <div class="form-group ms-5">
             @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
@@ -42,23 +37,30 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group ms-5">
             @Html.LabelFor(model => model.Roleid, "Roleid", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("Roleid",ViewBag.Roles as SelectList ,"Select Role" , htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("Roleid", ViewBag.Roles as SelectList, "Select Role", htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Roleid, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group ms-5">
             @Html.LabelFor(model => model.phone, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger" })
             </div>
         </div>
+        <div class="form-group ms-5">
+            @Html.LabelFor(model => model.Avatar, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" value="Avatar" name="Avatar" id="Avatar" />
+                @Html.ValidationMessageFor(model => model.Avatar, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-        <div class="form-group">
+        <div class="form-group ms-5">
             @Html.LabelFor(model => model.modified_date, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.modified_date, new { htmlAttributes = new { @class = "form-control" } })
@@ -68,15 +70,13 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-dark mt-2" />
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "UsersIndex")
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
